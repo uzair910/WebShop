@@ -124,7 +124,11 @@ class Database_Instant
   def GetAllItemsFromCart
     @@db.results_as_hash = true
     # fetch inventory items...
-    return @@db.execute "SELECT p.name , b.item_id, b.quantity FROM Basket b join Product p on p.item_id = b.item_id"
+    return @@db.execute "SELECT p.name ,i.price, b.item_id, b.quantity FROM " +
+                          " Basket b INNER JOIN Product p on p.item_id = b.item_id " +
+                          " INNER JOIN Inventory i on i.item_id = p.item_id "
+    #" Basket b, Product p, Inventory i " +
+    #" WHERE b.item_id = i.item_id AND i.item_id = p.item_id"
   end
 
   def EmptyCart

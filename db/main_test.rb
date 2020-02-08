@@ -1,3 +1,4 @@
+# This has been moved to models folder, at the moment , under _model files but has to be moved in _model_test in PHASE 4, (8.2.18:21)
 require_relative "db_initization"
 require "active_support/core_ext"
 # Now using above class to create objects
