@@ -6,10 +6,7 @@ class Database_Instant
 
   def Intialize_DB
     # OpenConnection()
-
-    puts "Creating tables"
     CreateTables() #start creating tables..
-    puts "Tables created successfully"
   end
 
   # ---------------------------------------------PRODUCT table, CRUD operation
@@ -22,6 +19,26 @@ class Database_Instant
     puts "Test product inserted"
   end
 
+  def UpdateProduct(item_id, product_Name = "", product_Description = "") # called if atleast name needs to be update, description update is optional
+    @@db.results_as_hash = true
+    if product_Description.empty? && !product_Name.empty?
+      return ""
+    end
+    sqlSet = ""
+    if !product_Name.nil? && !product_Name.empty?
+      sqlSet = " set name = '#{product_Name}'"
+    end
+
+    if !product_Description.nil? && !product_Description.empty?
+      if !sqlSet.empty?
+        sqlSet += ", desciption = '#{product_Description}'"
+      else
+        sqlSet = " set desciption = '#{product_Description}'"
+      end
+    end
+    @@db.execute "UPDATE Product #{sqlSet} where item_id = #{item_id}"
+  end
+
   def InsertProduct(product_Name, product_Description)
     @@db.results_as_hash = true
     @@db.execute "INSERT INTO Product(name,desciption) VALUES ('#{product_Name}','#{product_Description}')"
@@ -32,6 +49,11 @@ class Database_Instant
   def DeleteAllProducts
     #populate products...
     @@db.execute "DELETE FROM Product"
+  end
+
+  def DeleteProductByID(itemID)
+    #populate products...
+    @@db.execute "DELETE FROM Product where item_id = #{itemID}"
   end
 
   def GetAllProducts
@@ -98,14 +120,27 @@ class Database_Instant
     return rs
   end
 
-  # def UpdateInventoryItemQuantity
-  #   #populate products...
-  #   stm = @@db.prepare "SELECT * FROM Inventory"
-  #   rs = stm.execute
-  #   return rs
-  # end
-
   # ---------------------------------------------Basket table, CRUD operation
+  def GetAllItemsFromCart
+    @@db.results_as_hash = true
+    # fetch inventory items...
+    return @@db.execute "SELECT p.name , b.item_id, b.quantity FROM Basket b join Product p on p.item_id = b.item_id"
+  end
+
+  def EmptyCart
+    @@db.execute "DELETE FROM Basket"
+  end
+
+  def AddOrUpdateItemToCart(itemID, quantity)
+    @@db.results_as_hash = true
+    rowid = @@db.execute "INSERT OR IGNORE INTO Basket (item_id, quantity) VALUES(#{itemID},#{quantity})"
+
+    # if row id is null or empty, that means the  item already exists in the inventory, hence it we can just update the quantity..
+    id = @@db.execute "select last_insert_rowid() as ITEMID" #Check the last ID of the row that was inserted.
+    if id[0]["ITEMID"] == 0 #incase the row was not inserted (happens if it exists already, then id will be 0)
+      @@db.execute "UPDATE Basket set quantity = quantity + #{quantity} where item_id = #{itemID}"
+    end
+  end
 
   # ---------------------------------------------Initialziation methods
   #Create tables, perhaps insert some dummy data if need be..?
@@ -118,7 +153,6 @@ class Database_Instant
     @@db.execute "CREATE TABLE IF NOT EXISTS Inventory(item_id INTEGER NOT NULL  PRIMARY KEY,price NUMERIC  NOT NULL,quantity INTEGER ,extraNotes TEXT);"
 
     # customer's shopping cart... items that customer chose
-    #db.execute "CREATE TABLE IF NOT EXISTS Basket(ItemID INTEGER NOT NULL,price TEXT NOT NULL,quantity INTEGER ,extraNotes TEXT);"
-
+    @@db.execute "CREATE TABLE IF NOT EXISTS Basket(item_id INTEGER NOT NULL PRIMARY KEY, quantity INTEGER);"
   end
 end
