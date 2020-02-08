@@ -7,8 +7,9 @@ class Test
     db_instant = Database_Instant.new
     # db_instant.Intialize_DB
 
-    #ProductTablesTest(db_instant)
-
+    puts "\n Products:"
+    ProductTablesTest(db_instant)
+    puts "\n Inventory:"
     InventoryTableTest(db_instant)
   end
 
@@ -20,14 +21,17 @@ class Test
     #Insert some products..
     # db_instant.InsertProduct("Talvi Taakki ", "Winter jacket, blue color")
     # db_instant.InsertProduct("Gloves", "Gloves, black color")
-    # db_instant.InsertProduct("Salmiaki", "400ml, 40%")
+    # db_instant.InsertProduct("HAIBIKE 2", "XL Sze")
     products = db_instant.GetAllProducts
     # products = db_instant.GetProductIDByName("Gloves")
     #first_row = products.next
     # show products:
     bExist = false
     products.each do |row|
-      puts row.join "\s"
+      # puts row.join "\s"
+      name = row["name"]
+      pDescription = row["desciption"]
+      puts "#{name} , has description: #{pDescription} "
       if !bExist
         bExist = true
       end
@@ -38,29 +42,32 @@ class Test
   end
 
   def InventoryTableTest(db_instant) # INVENTORY Table ...
-    db_instant.ClearInventory
+    #db_instant.ClearInventory
+    #AddItemInInventory("HAIBIKE 2", 1, 3449.99, "very nice bike", db_instant)
+    #AddItemInInventory("Gloves", 6, 9.99, "Warmest gloves ever!", db_instant)
+    ViewInventory(db_instant)
+  end
+
+  def AddItemInInventory(item_Name, quantity, price, notes, db_instant)
     # #Insert some inventroy.. e.g gloves, if they exists in product table.
-    qty = 5 #define some quantity
-    price = 7 #price defined
-    extraNotes = "some note"
-    products = db_instant.GetProductIDByName("Gloves")
+    products = db_instant.GetProductIDByName(item_Name)
     bExist = false
     products.each do |row|
       itemID = row["item_id"]
-      puts itemID.to_s
-      db_instant.InsertItemInInventory(itemID, price, qty, extraNotes)
-      #db_instant.InsertItemInInventory(, , 5, "some important notes")
+      db_instant.InsertItemInInventory(itemID, price, quantity, notes)
       if !bExist
         bExist = true
       end
     end
     if !bExist
-      puts "Product doesnot exist. Therefore cannot be added to the inventory"
+      puts "Product with name #{item_Name} doesnot exist. Perhaps add it to Products first?"
     end
-    puts "lets check the inventory:"
+  end
+
+  def ViewInventory(db_instant)
     itemInInventory = db_instant.GetAllInventoryItems
     # puts "Fetched inventory"
-    # bExist = false
+    bExist = false
     itemInInventory.each do |item|
       #puts item.join "\s"
       itemID = item["item_id"]
@@ -69,9 +76,9 @@ class Test
       iPrice = item["price"]
       extraNotes = item["extraNotes"]
       if qty > 0
-        puts "#{name} ( id:  #{itemID} ) has price: #{iPrice}"
+        puts "#{name} ( id:  #{itemID} ) has price: #{iPrice}, and is in stock"
       else
-        puts "#{name} ( id:  #{itemID} ) is not in stalk  at the moment"
+        puts "#{name} ( id:  #{itemID} ) is not in stock  at the moment"
       end
 
       if !bExist
@@ -79,7 +86,7 @@ class Test
       end
     end
     if !bExist
-      puts "no product exists"
+      puts "inventory is empty at the moment, perhaps add items first?"
     end
   end
 end

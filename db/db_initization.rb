@@ -8,7 +8,6 @@ class Database_Instant
     # OpenConnection()
     puts "Creating tables"
     CreateTables() #start creating tables..
-
     puts "Tables created successfully"
   end
 
@@ -16,14 +15,15 @@ class Database_Instant
   def PopulateProducts
     puts "Inserting Data"
     #populate products...
-    @@db.execute "INSERT INTO Product (name,desciption)VALUES ('Winter Takki', 'Blue color jacket, Large size')"
+    @@db.execute "INSERT INTO Product (name,desciption) VALUES ('Winter Takki', 'Blue color jacket, Large size')"
     # id = @@db.execute "select last_insert_rowid()"
     # return id  # last insertid..
     puts "Test product inserted"
   end
 
   def InsertProduct(product_Name, product_Description)
-    @@db.execute "INSERT INTO Product(name,desciption)VALUES ('" + product_Name + "', '" + product_Description + "')"
+    @@db.results_as_hash = true
+    @@db.execute "INSERT INTO Product(name,desciption) VALUES ('#{product_Name}','#{product_Description}')"
 
     # @@db.execute "INSERT INTO Product (name, desciption)
     #                VALUES (?, ?)", ["name", product_Name, "desciption", product_Description]
@@ -35,11 +35,11 @@ class Database_Instant
   def DeleteAllProducts
     #populate products...
     @@db.execute "DELETE FROM Product"
-    puts "Product table truncated"
   end
 
   def GetAllProducts
     #fetch all products...
+    @@db.results_as_hash = true
     rs = @@db.execute "SELECT * FROM Product"
     return rs
   end
@@ -68,7 +68,6 @@ class Database_Instant
   def GetAllInventoryItems
     @@db.results_as_hash = true
     # #populate products...
-    puts "get all inventroy items."
     rs = @@db.execute "SELECT p.name , i.item_id, i.price, i.quantity, i.extranotes FROM Inventory i join Product p on p.item_id = i.item_id"
     #rs = @@db.execute "SELECT * FROM Inventory "
     return rs
