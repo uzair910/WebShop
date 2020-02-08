@@ -59,14 +59,14 @@ class Database_Instant
   def GetAllProducts
     #fetch all products...
     @@db.results_as_hash = true
-    rs = @@db.execute "SELECT * FROM Product"
+    rs = @@db.execute "SELECT * FROM Product Order by item_id asc"
     return rs
   end
 
   def GetProductIDByName(product_Name)
     #fetch products by name...
     @@db.results_as_hash = true
-    rs = @@db.execute("SELECT * FROM Product where name = ?", product_Name)
+    rs = @@db.execute("SELECT * FROM Product where name = ?  Order by item_id asc", product_Name)
     return rs
   end
 
@@ -98,7 +98,7 @@ class Database_Instant
   def GetAllInventoryItems
     @@db.results_as_hash = true
     # fetch inventory items...
-    rs = @@db.execute "SELECT p.name , i.item_id, i.price, i.quantity, i.extranotes FROM Inventory i join Product p on p.item_id = i.item_id"
+    rs = @@db.execute "SELECT p.name , i.item_id, i.price, i.quantity, i.extranotes FROM Inventory i join Product p on p.item_id = i.item_id order by i.item_id asc"
     return rs
   end
 
@@ -116,6 +116,7 @@ class Database_Instant
     elsif startPrice > 0 && endPrice == 0
       sql += " AND i.price > #{startPrice}"
     end
+    sql += " order by i.item_id asc"
     rs = @@db.execute sql
     return rs
   end
@@ -126,7 +127,8 @@ class Database_Instant
     # fetch inventory items...
     return @@db.execute "SELECT p.name ,i.price, b.item_id, b.quantity FROM " +
                           " Basket b INNER JOIN Product p on p.item_id = b.item_id " +
-                          " INNER JOIN Inventory i on i.item_id = p.item_id "
+                          " INNER JOIN Inventory i on i.item_id = p.item_id " +
+                          " ORDER BY b.item_id asc"
     #" Basket b, Product p, Inventory i " +
     #" WHERE b.item_id = i.item_id AND i.item_id = p.item_id"
   end

@@ -62,8 +62,8 @@ class Inventory_Model
   end
 
   def ViewInventory()
-    itemInInventory = @@db_instant.GetAllInventoryItems
-    #itemInInventory = db_instant.GetAllInventoryItemsByFilters("", 500)
+    #itemInInventory = @@db_instant.GetAllInventoryItems
+    itemInInventory = @@db_instant.GetAllInventoryItemsByFilters("", 2)
     # puts "Fetched inventory"
     bExist = false
     itemInInventory.each do |item|
