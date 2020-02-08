@@ -5,7 +5,7 @@ require "active_support/core_ext"
 class Test
   def Go()
     db_instant = Database_Instant.new
-    # db_instant.Intialize_DB
+    #db_instant.Intialize_DB
 
     puts "\n Products:"
     ProductTablesTest(db_instant)
@@ -14,18 +14,23 @@ class Test
   end
 
   def ProductTablesTest(db_instant)
-    ## fun with products
+    #Trucate data
     #db_instant.DeleteAllProducts
 
-    #db_instant.PopulateProducts
     #Insert some products..
-    # db_instant.InsertProduct("Talvi Taakki ", "Winter jacket, blue color")
-    # db_instant.InsertProduct("Gloves", "Gloves, black color")
-    # db_instant.InsertProduct("HAIBIKE 2", "XL Sze")
+    # InsertProduct("Talvi Taakki", "Winter jacket, blue color")
+    # InsertProduct("Gloves", "Gloves, black color")
+    # InsertProduct("HAIBIKE 2", "XL Sze")
+    ViewProducts(db_instant)
+  end
+
+  def InsertProducts(product_name, productDescription, db_instant)
+    db_instant.InsertProduct(product_name, productDescription)
+  end
+
+  def ViewProducts(db_instant)
     products = db_instant.GetAllProducts
     # products = db_instant.GetProductIDByName("Gloves")
-    #first_row = products.next
-    # show products:
     bExist = false
     products.each do |row|
       # puts row.join "\s"
@@ -43,8 +48,9 @@ class Test
 
   def InventoryTableTest(db_instant) # INVENTORY Table ...
     #db_instant.ClearInventory
-    #AddItemInInventory("HAIBIKE 2", 1, 3449.99, "very nice bike", db_instant)
-    #AddItemInInventory("Gloves", 6, 9.99, "Warmest gloves ever!", db_instant)
+    #AddItemInInventory("Talvi Taakki ", 2, 39, "very nice jacket, please buy", db_instant)
+    AddItemInInventory("HAIBIKE 2", 1, 349.99, "Cool bike", db_instant)
+    #db_instant.DeleteInventoryItem(3)
     ViewInventory(db_instant)
   end
 
@@ -54,7 +60,8 @@ class Test
     bExist = false
     products.each do |row|
       itemID = row["item_id"]
-      db_instant.InsertItemInInventory(itemID, price, quantity, notes)
+      # db_instant.InsertOrUpdateItemInInventory(itemID, price, quantity, notes)
+      # db_instant.UpdateItemPrice(3, 1000.99)
       if !bExist
         bExist = true
       end
@@ -66,6 +73,7 @@ class Test
 
   def ViewInventory(db_instant)
     itemInInventory = db_instant.GetAllInventoryItems
+    #itemInInventory = db_instant.GetAllInventoryItemsByFilters("", 500)
     # puts "Fetched inventory"
     bExist = false
     itemInInventory.each do |item|
@@ -76,7 +84,7 @@ class Test
       iPrice = item["price"]
       extraNotes = item["extraNotes"]
       if qty > 0
-        puts "#{name} ( id:  #{itemID} ) has price: #{iPrice}, and is in stock"
+        puts "#{name} ( id:  #{itemID} ) has price: #{iPrice}, and is in stock (qty:#{qty}) "
       else
         puts "#{name} ( id:  #{itemID} ) is not in stock  at the moment"
       end
