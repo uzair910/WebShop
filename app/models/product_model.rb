@@ -16,11 +16,11 @@ class Product_Model
   end
 
   def UpdateProduct(item_id, product_Name = "", product_Description = "") # called if atleast name needs to be update, description update is optional
-    @@db_instant.UpdateProduct
+    @@db_instant.UpdateProduct(item_id, product_Name, product_Description)
   end
 
   def InsertProduct(product_Name, product_Description)
-    return @@db_instant.InsertProduct
+    return @@db_instant.InsertProduct(product_Name, product_Description)
   end
 
   def DeleteAllProducts

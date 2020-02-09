@@ -21,9 +21,9 @@ class Database_Instant
 
   def UpdateProduct(item_id, product_Name = "", product_Description = "") # called if atleast name needs to be update, description update is optional
     @@db.results_as_hash = true
-    if product_Description.empty? && !product_Name.empty?
-      return ""
-    end
+    # if product_Description.empty? && !product_Name.empty?
+    #   return ""
+    # end
     sqlSet = ""
     if !product_Name.nil? && !product_Name.empty?
       sqlSet = " set name = '#{product_Name}'"
@@ -36,6 +36,7 @@ class Database_Instant
         sqlSet = " set desciption = '#{product_Description}'"
       end
     end
+    puts "UPDATE SQL: #{sqlSet}"
     @@db.execute "UPDATE Product #{sqlSet} where item_id = #{item_id}"
   end
 

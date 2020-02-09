@@ -1,22 +1,25 @@
 require_relative "../controllers/inventory_manager_controller.rb"
 require "terminal-table"
+require_relative "./product_management_view.rb"
 
 class Management_View
   @@inventory_Controller = Inventory_Controller.new
 
   @@DisplayManagementOption = ""
   @@inventory_Table = []
+  @@product_table = []
 
   def Init # display controls options
     # initialize controller
     @@inventory_Controller.Init
     # would be required again at multiple places so rather declare it globally (IDEALLY should be a private cosnt : NTS : Check if possible)
-    @@DisplayManagementOption = "\nPress S to SORT items from inventory\n" +
-                                "Press F to FILTER items by price\n" +
+    @@DisplayManagementOption = "\nPress 'S' to SORT items in the table\n" +
+                                "Press 'F' to FILTER items by price\n" +
+                                "Press 'B' to go back to main page\n" +
                                 "Press 1 to MANAGE Products\n" +
-                                "Press 2 to ADD/UPDATE products to Inventory\n" +
-                                "Press 3 Delete Items from Inventory\n" +
-                                "Press B to go back to main page"
+                                "Press 2 to ADD/UPDATE item in Inventory\n" +
+                                "Press 3 Delete Items from Inventory\n"
+    FetchProduct()
   end
 
   def Run
@@ -35,11 +38,10 @@ class Management_View
       if bIsIntegerEntered
         case input.to_i
         when 1
-          puts "MANAGE Products" #TODO
-
+          ProductManagement()   #DONE
           bShowOptionsAgain = true
         when 2
-          InventoryManagement()         #DONE, todo pagination, filters
+          InventoryManagement()         #DONE,
           bShowOptionsAgain = true
         when 3
           DeleteItemFromInventory()       #DONE
@@ -67,6 +69,23 @@ class Management_View
     end
   end
 
+  #region Product Management
+  def ProductManagement
+    puts "In productManagement"
+    productManagementView = Prodcut_Management_View.new
+    productManagementView.Run(@@product_table)
+  end
+
+  #endregion
+
+  def FetchProduct()
+    @@product_table = @@inventory_Controller.GetAllTheProduct()
+  end
+
+  def DisplayProductTable()
+    puts @@product_table
+  end
+
   #regiion Inventory Management
   def DisplayInventoryTable()
     puts @@inventory_Table
@@ -78,11 +97,10 @@ class Management_View
   end
 
   def InventoryManagement()
-    productTable = @@inventory_Controller.GetAllTheProduct()
-    puts productTable
+    DisplayProductTable()
 
     while true
-      print "Input ID for the product you want to ADD (or press B to go back): "
+      print "\tInput ID for the product you want to ADD (or press B to go back): "
       item_id = gets.chomp
       bIsIntegerEntered = Integer(item_id) rescue false # try catch equilent to see if input is integer or string
       if bIsIntegerEntered
@@ -93,22 +111,23 @@ class Management_View
           itemQty = @@inventory_Controller.GetItemQuantityInInventory(item_id.to_i)
           # puts "ITEM QTY: " + itemQty
           if itemQty > 0
-            puts "\nItem ALREADY EXISTS in inventory. Its QUANTITY in stock is #{itemQty}. You can add more stock to the exisitng item.\n"
-            puts "Enter the quantity below. (press any non-numeric character to cancel operation)"
-            print "Enter here: "
+            puts "\n\tItem ALREADY EXISTS in inventory. Its QUANTITY in stock is #{itemQty}. You can add more stock to the exisitng item.\n"
+            puts "\tEnter the quantity below. (press any non-numeric character to cancel operation)"
+            print "\tEnter here: "
             newQuantity = gets.chomp
             bIsIntegerEntered = Integer(newQuantity) rescue false # try catch equilent to see if input is integer or string
             if bIsIntegerEntered
               #new quantity entered, update existing inventory item..item_id, price, quantity, extraNotes
               @@inventory_Controller.UpdateInventoryItem(item_id.to_i, -1, newQuantity.to_i)
               ReloadInventoryTable()
+              break
             end
           else
-            print "Enter quantity (or enter any non-numeric charater to exist) : "
+            print "\tEnter quantity (or enter any non-numeric charater to exist) : "
             newQuantity = gets.chomp
-            print "Enter Price (or enter any non-numeric charater to exist) : "
+            print "\tEnter Price (or enter any non-numeric charater to exist) : "
             newPrice = gets.chomp
-            print "Enter any additional info: "
+            print "\tEnter any additional info: "
             extraNotes = gets.chomp
             bIsIntegerEntered = Integer(newQuantity) rescue false # try catch equilent to see if input is integer or string
             if Integer(newQuantity) && Float(newPrice)
@@ -118,47 +137,50 @@ class Management_View
             end
           end
         else
-          puts "Product with the entered ID not found. perhaps create it first." #todo Phase 4. link this to product creation function
+          puts "\tProduct with the entered ID not found. perhaps create it first." #todo Phase 4. link this to product creation function
         end
       else #wrong id, id cant be a number..
         break if item_id.to_s.upcase == "B"
         if item_id.to_s.upcase == "P" #Todo
           puts "PAGINATION"
         elsif item_id.to_s.upcase == "A" #Todo
-          puts productTable
+          DisplayProductTable()
+        else
+          puts "\tProduct with the entered ID not found. perhaps create it first." #todo Phase 4. link this to product creation function
         end
       end
     end
   end
 
   def DeleteItemFromInventory()
-    print "Input Item ID that you would want to delete (or press B to go back):  "
+    print "\tInput Item ID that you would want to delete (or press 'B' to go back):  "
     while true
       item_id = gets.chomp
       if (Integer(item_id) rescue false)
         if @@inventory_Controller.ExistInInventory(item_id.to_i)
           #confirm message,
-          print "Are you sure? (Y/N)"
+          print "\tAre you sure? (Y/N)"
           confirm = gets.chomp
           if confirm.to_s.upcase == "Y"
             @@inventory_Controller.DeleteItemFromInventory(item_id.to_i)
-            puts "Item with ID #{item_id} deleted."
+            puts "\tItem with ID #{item_id} DELETED."
             ReloadInventoryTable()
             break
           else
             break #could do something else? PHASE 4
           end
         else
-          print "Invalid ID, try entering again: "
+          print "\tInvalid ID, try entering again: "
         end
       else
         break if item_id.to_s.upcase == "B"
         if item_id.to_s.upcase == "P" #Todo
-          puts "PAGINATION"
-        elsif item_id.to_s.upcase == "A" #Todo
-          puts "productTable"
+          puts "\tPAGINATION"
+        elsif item_id.to_s.upcase == "A"
+          DisplayInventoryTable()
+          print "\tEnter item ID: "
         else
-          print "Invalid ID, try entering again: "
+          print "\tInvalid ID, try entering again: "
         end
       end
     end

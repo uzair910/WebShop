@@ -37,6 +37,45 @@ class Inventory_Controller
     return false
   end
 
+  def AddProduct(name, description)
+    newProdID = @@products_Instance.InsertProduct(name, description)
+    if newProdID.any?
+      return true
+    end
+    return false
+  end
+
+  def UpdateProduct(id, name, description)
+    begin
+      newProdID = @@products_Instance.UpdateProduct(id, name, description)
+      return true
+    rescue SystemCallError
+      return false
+    end
+  end
+
+  def DeleteProduct(item_ID)
+    begin
+      @@products_Instance.DeleteProductByID(item_ID)
+      return true
+    rescue SystemCallError
+      return false
+    end
+  end
+
+  def IsProductWithNameAlreadyExist(productName)
+    @@productsList.each do |item|
+      name = item["name"]
+      itemID = item["item_id"]
+
+      if name.to_s.upcase == productName.to_s.upcase
+        puts "#{productName} and fetched : #{name} "
+        return itemID
+      end
+    end
+    return -1
+  end
+
   # INVENTORY table helper methods
   #Sortby contains column name by which data is requested to be sorted , by default, its empty, meaning data will be sorted by item id
   #returns tabular form
@@ -52,7 +91,7 @@ class Inventory_Controller
 
       tableRows << [itemID, name, iPrice, qty, extraNotes]
     end
-    return Terminal::Table.new :title => "Inventory", :headings => ["ID", "Name", "Price", "Quantity", "Extra Notes"], :rows => tableRows
+    return Terminal::Table.new :title => "Inventory", :headings => ["ID", "Name", "Price (Euros)", "Quantity", "Extra Notes"], :rows => tableRows
   end
 
   def UpdateInventoryItem(item_id, price = -1, quantity = -1, extraNotes = "")

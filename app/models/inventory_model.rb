@@ -92,4 +92,4 @@ class Inventory_Model
   end
 end
 
-Inventory_Model.new.InventoryTableTest # To run test , to check if model is correctly interacting with DB
+#Inventory_Model.new.InventoryTableTest # To run test , to check if model is correctly interacting with DB

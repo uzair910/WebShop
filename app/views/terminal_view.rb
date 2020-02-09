@@ -3,8 +3,8 @@ require_relative "./shopping_view.rb"
 require_relative "./management_view.rb"
 
 class Termainal_View
-  @@options = "\nPress 1 to shop\nPress 2 to manage inventory\nPress 3 to exit\nPress P (at any time) to set items to view per page\n" +
-              "Press A (at any time) see the table/Options for that module again"   #by default, view all items in one page"
+  @@options = "\nPress 1 to shop\nPress 2 to manage inventory\nPress 3 to exit\nPress 'P' (at any time) to set items to view per page\n" +
+              "Press 'A' (at any time) see the table/Options for that module again"   #by default, view all items in one page"
 
   def Init()
     managementView = Management_View.new
