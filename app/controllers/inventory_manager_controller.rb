@@ -59,6 +59,10 @@ class Inventory_Controller
     @@inventory_Instance.UpdateInvetoryItem(item_id, price, quantity, extraNotes)
   end
 
+  def DeleteItemFromInventory(item_id)
+    @@inventory_Instance.DeleteInventoryItem(item_id)
+  end
+
   def ExistInInventory(param_ID)
     @@inventory_itemsList.each do |item|
       itemID = item["item_id"]

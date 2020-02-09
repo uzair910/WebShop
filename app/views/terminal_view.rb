@@ -25,15 +25,16 @@ class Termainal_View
           # to management panel
           managementView.Init
           managementView.Run
+          puts @@options #Todo
         elsif input.to_i == 3
           break
         else
           bDisplayInvalidOption = true
         end
       else
-        if input.to_s.upcase3 == "P"
+        if input.to_s.upcase == "P"
           puts "PAGINATION"  #Todo
-        elsif input.to_s.upcase3 == "A"
+        elsif input.to_s.upcase == "A"
           puts @@options #Todo
         else
           bDisplayInvalidOption = true

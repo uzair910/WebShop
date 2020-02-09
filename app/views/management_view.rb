@@ -13,9 +13,9 @@ class Management_View
     # would be required again at multiple places so rather declare it globally (IDEALLY should be a private cosnt : NTS : Check if possible)
     @@DisplayManagementOption = "\nPress S to SORT items from inventory\n" +
                                 "Press F to FILTER items by price\n" +
-                                "Press 1 to ADD products to the inventory\n" +
-                                "Press 2 to MANAGE inventory (update quantity, or price)\n" +
-                                "Press 3 to MANAGE Products (ADD/DELETE product)\n" +
+                                "Press 1 to MANAGE Products\n" +
+                                "Press 2 to ADD/UPDATE products to Inventory\n" +
+                                "Press 3 Delete Items from Inventory\n" +
                                 "Press B to go back to main page"
   end
 
@@ -30,6 +30,7 @@ class Management_View
     while true
       print "Enter your choice here: "
       input = gets.chomp
+
       bIsIntegerEntered = Integer(input) rescue false # try catch equilent to see if input is integer or string
       if bIsIntegerEntered
         case input.to_i
@@ -38,11 +39,10 @@ class Management_View
 
           bShowOptionsAgain = true
         when 2
-          puts "Add/Update products to Inventory!" #DONE!
-          InventoryManagement()
+          InventoryManagement()         #DONE, todo pagination, filters
           bShowOptionsAgain = true
         when 3
-          puts "Delete Items from Inventory" #Todo
+          DeleteItemFromInventory()       #DONE
           bShowOptionsAgain = true
         else
           print "Oops, you type an invalid option. try again? "
@@ -67,6 +67,7 @@ class Management_View
     end
   end
 
+  #regiion Inventory Management
   def DisplayInventoryTable()
     puts @@inventory_Table
   end
@@ -92,8 +93,9 @@ class Management_View
           itemQty = @@inventory_Controller.GetItemQuantityInInventory(item_id.to_i)
           # puts "ITEM QTY: " + itemQty
           if itemQty > 0
-            puts "\nItem ALREADY EXISTS in inventory. Its QUANTITY in stock is #{itemQty}" #under progress
-            puts "If you would like to update the quantity, then enter the new quantity below.\nIncase you would like to cancel, press any non-numeric character..."
+            puts "\nItem ALREADY EXISTS in inventory. Its QUANTITY in stock is #{itemQty}. You can add more stock to the exisitng item.\n"
+            puts "Enter the quantity below. (press any non-numeric character to cancel operation)"
+            print "Enter here: "
             newQuantity = gets.chomp
             bIsIntegerEntered = Integer(newQuantity) rescue false # try catch equilent to see if input is integer or string
             if bIsIntegerEntered
@@ -128,4 +130,39 @@ class Management_View
       end
     end
   end
+
+  def DeleteItemFromInventory()
+    print "Input Item ID that you would want to delete (or press B to go back):  "
+    while true
+      item_id = gets.chomp
+      if (Integer(item_id) rescue false)
+        if @@inventory_Controller.ExistInInventory(item_id.to_i)
+          #confirm message,
+          print "Are you sure? (Y/N)"
+          confirm = gets.chomp
+          if confirm.to_s.upcase == "Y"
+            @@inventory_Controller.DeleteItemFromInventory(item_id.to_i)
+            puts "Item with ID #{item_id} deleted."
+            ReloadInventoryTable()
+            break
+          else
+            break #could do something else? PHASE 4
+          end
+        else
+          print "Invalid ID, try entering again: "
+        end
+      else
+        break if item_id.to_s.upcase == "B"
+        if item_id.to_s.upcase == "P" #Todo
+          puts "PAGINATION"
+        elsif item_id.to_s.upcase == "A" #Todo
+          puts "productTable"
+        else
+          print "Invalid ID, try entering again: "
+        end
+      end
+    end
+  end
+
+  #endregion
 end
