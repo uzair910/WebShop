@@ -87,6 +87,12 @@ class Database_Instant
     @@db.execute "UPDATE Inventory set price = #{price} where item_id = #{item_id}"
   end
 
+  def RestoreItemQty(item_id, qty)
+    @@db.results_as_hash = true
+    puts ".RestoreItemQty #{qty} where item_id = #{item_id}"
+    @@db.execute "UPDATE Inventory set quantity = quantity + #{qty} where item_id = #{item_id}"
+  end
+
   def UpdateItemQty(item_id, qty)
     @@db.results_as_hash = true
     @@db.execute "UPDATE Inventory set quantity =  #{qty} where item_id = #{item_id}"
@@ -140,6 +146,10 @@ class Database_Instant
 
   def EmptyCart
     @@db.execute "DELETE FROM Basket"
+  end
+
+  def DeleteItemByID(itemID)
+    @@db.execute "DELETE FROM Basket where item_id =  #{itemID}"
   end
 
   def AddOrUpdateItemToCart(itemID, quantity)

@@ -28,7 +28,7 @@ class Cart_Model
   def BasketTableTest()
     puts "\n Shopping Basket Items:"
     Init()
-    DeleteItemsInCart()
+    #DeleteItemsInCart()
     #AddItemToCart("HAIBIKE 2", 1)
     #UpdateQtyOfItem("HAIBIKE 2", 2)
 
@@ -40,6 +40,10 @@ class Cart_Model
 
   def DeleteItemsInCart()
     @@db_instant.EmptyCart()
+  end
+
+  def DeleteItemInCart(itemID)
+    @@db_instant.DeleteItemByID(itemID)
   end
 
   def AddItemToCart(itemName, qty)

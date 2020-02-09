@@ -23,7 +23,7 @@ class Shopping_Cart_Controller
         qty = item["quantity"]
         iPrice = item["price"]
         iTotalPrice = qty * iPrice
-        tableRows << [itemID, name, iPrice, qty, iTotalPrice]
+        tableRows << [itemID, name, iPrice, qty, iTotalPrice.round(2)]
         customerTotalPrice += iTotalPrice
       end
       # Insert a footer row...
@@ -35,6 +35,17 @@ class Shopping_Cart_Controller
     end
   end
 
+  def GetItemQuantityInCart(param_itemID)
+    @@cartList.each do |item|
+      itemID = item["item_id"]
+      qty = item["quantity"]
+      if itemID.to_i == param_itemID.to_i
+        return qty
+      end
+    end
+    return 0
+  end
+
   def GetAllItemsFromCart()
     @@cartList = @@cart_Instance.GetAllItemsFromCart #update cart
   end
@@ -44,6 +55,23 @@ class Shopping_Cart_Controller
     #need to update the table aswell.
     PopulateCartTable()
     #need to update Quantity in inventory table..
+    @@inventory_Controller.UpdateItemQty(itemID.to_i, remainingQty)
+  end
+
+  def EmptyCart()
+    # delete item from cart, but first update inventory qty
+    @@cartList.each do |item|
+      itemID = item["item_id"]
+      qty = item["quantity"]
+      @@inventory_Controller.UpdateInventoryItemQuantity(itemID.to_i, qty.to_i)
+    end
+    @@cart_Instance.EmptyCart()
+    PopulateCartTable()
+  end
+
+  def DeleteItem(itemID, remainingQty)
+    @@cart_Instance.DeleteItemInCart(itemID)
+    PopulateCartTable()
     @@inventory_Controller.UpdateItemQty(itemID.to_i, remainingQty)
   end
 

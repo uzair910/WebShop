@@ -16,7 +16,8 @@ class Shopping_Cart_View
                                 "Press 'B' to go back to main page\n" +
                                 "Press 1 to ADD/UPDATE items to your cart\n" +
                                 # "Press 2 to UPDATE item quantity for an Item in your cart\n" +
-                                "Press 2 DELETE Items from your Cart\n"
+                                "Press 2 DELETE Items from your Cart\n" +
+                                "Press 3 to Empty your cart\n"
     LoadInventory()
   end
 
@@ -35,9 +36,16 @@ class Shopping_Cart_View
         if input.to_i == 1 # DONE
           # to the shopping cart
           AddItemsToCart()
+          puts @@DisplayManagementOption
           print "Enter choice: "
         elsif input.to_i == 2 # DELETE In progres
           # to management panel
+          DeleteItem()
+          print "Enter choice: "
+        elsif input.to_i == 3 # DELETE In progres
+          # to management panel
+          DeleteItem(true)
+          print "Enter choice: "
         else
           bDisplayInvalidOption = true
         end
@@ -46,6 +54,7 @@ class Shopping_Cart_View
         if input.to_s.upcase == "P"
           puts "PAGINATION"  #Todo
         elsif input.to_s.upcase == "A"
+          puts DisplayCartItems()
           puts @@DisplayManagementOption
         elsif input.to_s.upcase == "F"
         else
@@ -58,10 +67,58 @@ class Shopping_Cart_View
     end
   end
 
+  def DeleteItem(bDeleteAll = false)
+    if bDeleteAll
+      print "\tAre you sure? Press 'Y' delete all items from cart: "
+      confirm = gets.chomp
+      if confirm.to_s.upcase == "Y"
+        @@cart_Controller.EmptyCart()
+        puts "\tItems removed"
+        LoadCartItem()
+      end
+      return
+    end
+    puts "Lets DELETE items to cart. You can just type 'B' to go back and cancel this operation."
+    DisplayCartItems()
+    while true
+      print "\tEnter Item ID that you want to remove from your cart: "
+      itemID = gets.chomp
+      bIsIntegerEntered = Integer(itemID) rescue false # try catch equilent to see if input is integer or string
+      if bIsIntegerEntered
+        if @@cart_Controller.ExistInInventory(itemID.to_i)
+          qtyInCart = @@cart_Controller.GetItemQuantityInCart(itemID.to_i)
+          availableQty = @@cart_Controller.GetItemQuantityInInventory(itemID.to_i)
+          remainingItems = availableQty.to_i + qtyInCart.to_i
+
+          @@cart_Controller.DeleteItem(itemID, remainingItems)
+          LoadCartItem()
+          ReloadInventoryTable()
+          DisplayCartItems()
+          puts "\tItem removed from your cart"
+          next
+        else
+          puts "\tThis item doesnot exist in your cart"
+          next
+        end
+      else
+        break if itemID.to_s.upcase == "B"
+        if itemID.to_s.upcase == "P" #Todo
+          puts "\tPAGINATION"
+        elsif itemID.to_s.upcase == "A"
+          DisplayCartItems()
+          next
+        else
+          puts "\tInvalid ID, try entering again: "
+        end
+      end
+    end
+  end
+
   def AddItemsToCart()
     puts "Lets ADD a new item to cart. You can just type 'B' to go back and cancel this operation."
     puts "We have Following items in the market: "
     DisplayInventoryTable()
+
     while true
       print "\tEnter Item ID that you want to purchase: "
       itemID = gets.chomp
@@ -88,10 +145,8 @@ class Shopping_Cart_View
               puts "\tSorry, We have only #{availableQty} items in stock. You cannot buy more than this."
             else
               #Kaikki hyvin, lets process the order..
-
               #add to the cart, and then update qty in the inventory
               remainingItems = availableQty.to_i - orderedQty.to_i
-              puts "\tProcessing your order #{remainingItems}"
 
               @@cart_Controller.InsertOrUpdateCart(itemID, orderedQty, remainingItems)
               LoadCartItem()

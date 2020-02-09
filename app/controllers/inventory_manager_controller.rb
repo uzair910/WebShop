@@ -98,6 +98,10 @@ class Inventory_Controller
     @@inventory_Instance.UpdateInvetoryItem(item_id, price, quantity, extraNotes)
   end
 
+  def UpdateInventoryItemQuantity(itemID, qty) #Called by shopping_cart_controller.empty cart, to restore the inventory item quantity
+    @@inventory_Instance.UpdateInventoryItemQuantity(itemID, qty)
+  end
+
   def UpdateItemQty(itemID, quantity)
     @@inventory_Instance.UpdateItemQty(itemID, quantity)
   end
