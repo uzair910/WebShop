@@ -1,8 +1,10 @@
 require_relative "../controllers/shopping_cart_controller.rb"
+require_relative "../controllers/commonFunctions.rb"
 require "terminal-table"
 
 class Shopping_Cart_View
   @@cart_Controller = Shopping_Cart_Controller.new
+  @@commonFunctions = CommonFunctions.new
 
   @@DisplayManagementOption = ""
   @@inventory_Table = []
@@ -39,15 +41,12 @@ class Shopping_Cart_View
           # to the shopping cart
           AddItemsToCart()
           puts @@DisplayManagementOption
-          print "Enter choice: "
         elsif input.to_i == 2 # DELETE In progres
           # to management panel
           DeleteItem()
-          print "Enter choice: "
         elsif input.to_i == 3 # DELETE In progres
           # to management panel
           DeleteItem(true)
-          print "Enter choice: "
         else
           bDisplayInvalidOption = true
         end
@@ -58,20 +57,21 @@ class Shopping_Cart_View
         elsif input.to_s.upcase == "A"
           DisplayCartItems()
           puts @@DisplayManagementOption
-          print "Enter choice: "
         elsif input.to_s.upcase == "C"
           DisplayCartItems()
-          print "Enter choice: "
         elsif input.to_s.upcase == "I"
           DisplayInventoryTable()
-          print "Enter choice: "
         elsif input.to_s.upcase == "F"
+        elsif input.to_s.upcase == "S"
+          SortCart()
         else
           bDisplayInvalidOption = true
         end
       end
       if bDisplayInvalidOption
         print "Invalid option, try again: "
+      else
+        print "Enter choice: "
       end
     end
   end
@@ -188,6 +188,10 @@ class Shopping_Cart_View
     end
   end
 
+  def SortCart()
+    DisplaySortOption()
+  end
+
   #Region CART
   def LoadCartItem()
     @@cart_table = @@cart_Controller.PopulateCartTable() #refecth the table..
@@ -195,6 +199,28 @@ class Shopping_Cart_View
 
   def DisplayCartItems()
     puts @@cart_table
+  end
+
+  def DisplaySortOption()
+    puts @@commonFunctions.GetSortTableList(@@commonFunctions.Table_Cart)
+    optionSelected = gets.chomp
+    columnSelected = @@commonFunctions.GetSortedColumnName(optionSelected, @@commonFunctions.Table_Cart)
+    bSortOrderAscending = true
+    if columnSelected.upcase != @@commonFunctions.Column_Invalid
+      print "Inorder to sort in descending order, press 'D' (press any other key to continue: "
+      sortOrder = gets.chomp
+      begin
+        if sortOrder.upcase.to_s == "D"
+          bSortOrderAscending = false
+        end
+      rescue
+      end
+      @@cart_table = @@cart_Controller.SortByColumn(columnSelected, bSortOrderAscending)
+      @@cart_table = @@cart_Controller.GetCartTable() #refecth the table..
+      DisplayCartItems()
+    else
+      puts "Cannont sort based on your selection. try again"
+    end
   end
 
   #endregion CART

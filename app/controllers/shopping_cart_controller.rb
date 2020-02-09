@@ -11,9 +11,21 @@ class Shopping_Cart_Controller
     @@cart_Instance.Init
   end
 
+  def SortByColumn(columnName, bAsc)
+    if bAsc #ascending order
+      @@cartList = @@cartList.sort_by { |k| k["#{columnName.downcase}"] }
+    else #descending order
+      @@cartList = @@cartList.sort_by { |k| k["#{columnName.downcase}"] }.reverse!
+    end
+  end
+
   def PopulateCartTable(sortBy = "")
     GetAllItemsFromCart()
     #p.name ,i.price, b.item_id, b.quantity
+    return GetCartTable()
+  end
+
+  def GetCartTable()
     if @@cartList.any?
       customerTotalPrice = 0
       tableRows = []
