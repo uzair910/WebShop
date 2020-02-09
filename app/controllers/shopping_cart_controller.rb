@@ -58,6 +58,14 @@ class Shopping_Cart_Controller
     @@inventory_Controller.UpdateItemQty(itemID.to_i, remainingQty)
   end
 
+  def isEmptyCart()
+    if @@cartList.empty?
+      return true
+    else
+      return false
+    end
+  end
+
   def EmptyCart()
     # delete item from cart, but first update inventory qty
     @@cartList.each do |item|
@@ -72,7 +80,7 @@ class Shopping_Cart_Controller
   def DeleteItem(itemID, remainingQty)
     @@cart_Instance.DeleteItemInCart(itemID)
     PopulateCartTable()
-    @@inventory_Controller.UpdateItemQty(itemID.to_i, remainingQty)
+    @@inventory_Controller.UpdateInventoryItemQuantity(itemID.to_i, remainingQty.to_i)
   end
 
   def PopulateInventoryTable(sortBy = "")

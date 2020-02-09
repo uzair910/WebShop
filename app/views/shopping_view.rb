@@ -14,6 +14,8 @@ class Shopping_Cart_View
     @@DisplayManagementOption = "\nPress 'S' to SORT items in the table\n" +
                                 "Press 'F' to FILTER items by price\n" +
                                 "Press 'B' to go back to main page\n" +
+                                "Press 'C' to View your CART\n" +
+                                "Press 'I' to See the inventory\n" +
                                 "Press 1 to ADD/UPDATE items to your cart\n" +
                                 # "Press 2 to UPDATE item quantity for an Item in your cart\n" +
                                 "Press 2 DELETE Items from your Cart\n" +
@@ -54,8 +56,15 @@ class Shopping_Cart_View
         if input.to_s.upcase == "P"
           puts "PAGINATION"  #Todo
         elsif input.to_s.upcase == "A"
-          puts DisplayCartItems()
+          DisplayCartItems()
           puts @@DisplayManagementOption
+          print "Enter choice: "
+        elsif input.to_s.upcase == "C"
+          DisplayCartItems()
+          print "Enter choice: "
+        elsif input.to_s.upcase == "I"
+          DisplayInventoryTable()
+          print "Enter choice: "
         elsif input.to_s.upcase == "F"
         else
           bDisplayInvalidOption = true
@@ -68,6 +77,11 @@ class Shopping_Cart_View
   end
 
   def DeleteItem(bDeleteAll = false)
+    #check if cart is not empty
+    if (@@cart_Controller.isEmptyCart())
+      puts "\t Your cart is already empty"
+      return
+    end
     if bDeleteAll
       print "\tAre you sure? Press 'Y' delete all items from cart: "
       confirm = gets.chomp
@@ -75,6 +89,7 @@ class Shopping_Cart_View
         @@cart_Controller.EmptyCart()
         puts "\tItems removed"
         LoadCartItem()
+        ReloadInventoryTable()
       end
       return
     end
@@ -87,13 +102,11 @@ class Shopping_Cart_View
       if bIsIntegerEntered
         if @@cart_Controller.ExistInInventory(itemID.to_i)
           qtyInCart = @@cart_Controller.GetItemQuantityInCart(itemID.to_i)
-          availableQty = @@cart_Controller.GetItemQuantityInInventory(itemID.to_i)
-          remainingItems = availableQty.to_i + qtyInCart.to_i
-
-          @@cart_Controller.DeleteItem(itemID, remainingItems)
+          @@cart_Controller.DeleteItem(itemID, qtyInCart)
           LoadCartItem()
-          ReloadInventoryTable()
           DisplayCartItems()
+          ReloadInventoryTable()
+
           puts "\tItem removed from your cart"
           next
         else
