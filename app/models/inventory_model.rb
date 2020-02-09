@@ -22,6 +22,10 @@ class Inventory_Model
     @@db_instant.UpdateItemPrice(item_id, price)
   end
 
+  def UpdateItemQty(itemID, quantity)
+    @@db_instant.UpdateItemQty(itemID, quantity)
+  end
+
   def DeleteInventoryItem(itemID)
     @@db_instant.DeleteInventoryItem(itemID)
   end

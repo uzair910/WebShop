@@ -98,6 +98,10 @@ class Inventory_Controller
     @@inventory_Instance.UpdateInvetoryItem(item_id, price, quantity, extraNotes)
   end
 
+  def UpdateItemQty(itemID, quantity)
+    @@inventory_Instance.UpdateItemQty(itemID, quantity)
+  end
+
   def DeleteItemFromInventory(item_id)
     @@inventory_Instance.DeleteInventoryItem(item_id)
   end

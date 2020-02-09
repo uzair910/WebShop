@@ -8,8 +8,8 @@ class Termainal_View
 
   def Init()
     managementView = Management_View.new
+    shoppingCartView = Shopping_Cart_View.new
     puts "\n\n\t\tWelcome to terminal edition of Kwiki Mart"
-
     puts @@options
     input = 0
 
@@ -20,12 +20,15 @@ class Termainal_View
       if bIsIntegerEntered
         #  break if input.to_i == 3
         if input.to_i == 1 # TODO
-          #view list..
-        elsif input.to_i == 2 # Under Progress
+          # to the shopping cart
+          shoppingCartView.Init
+          shoppingCartView.Run
+          puts @@options
+        elsif input.to_i == 2 # Done
           # to management panel
           managementView.Init
           managementView.Run
-          puts @@options #Todo
+          puts @@options
         elsif input.to_i == 3
           break
         else

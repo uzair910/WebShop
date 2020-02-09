@@ -75,7 +75,6 @@ class Database_Instant
   def InsertOrUpdateItemInInventory(item_id, price, quantity, extraNotes) # either inserts new item in inventory, or updates the quantity if already exists
     @@db.results_as_hash = true
     rowid = @@db.execute "INSERT OR IGNORE INTO Inventory(item_id, price, quantity, extraNotes) VALUES(#{item_id},#{price},#{quantity},'#{extraNotes}')"
-
     # if row id is null or empty, that means the  item already exists in the inventory, hence it we can just update the quantity..
     id = @@db.execute "select last_insert_rowid() as ITEMID" #Check the last ID of the row that was inserted.
     if id[0]["ITEMID"] == 0 #incase the row was not inserted (happens if it exists already, then id will be 0)
@@ -86,6 +85,11 @@ class Database_Instant
   def UpdateItemPrice(item_id, price)
     @@db.results_as_hash = true
     @@db.execute "UPDATE Inventory set price = #{price} where item_id = #{item_id}"
+  end
+
+  def UpdateItemQty(item_id, qty)
+    @@db.results_as_hash = true
+    @@db.execute "UPDATE Inventory set quantity =  #{qty} where item_id = #{item_id}"
   end
 
   def DeleteInventoryItem(itemID)
@@ -141,7 +145,6 @@ class Database_Instant
   def AddOrUpdateItemToCart(itemID, quantity)
     @@db.results_as_hash = true
     rowid = @@db.execute "INSERT OR IGNORE INTO Basket (item_id, quantity) VALUES(#{itemID},#{quantity})"
-
     # if row id is null or empty, that means the  item already exists in the inventory, hence it we can just update the quantity..
     id = @@db.execute "select last_insert_rowid() as ITEMID" #Check the last ID of the row that was inserted.
     if id[0]["ITEMID"] == 0 #incase the row was not inserted (happens if it exists already, then id will be 0)

@@ -28,8 +28,8 @@ class Cart_Model
   def BasketTableTest()
     puts "\n Shopping Basket Items:"
     Init()
-    # DeleteItemsInCart()
-    AddItemToCart("HAIBIKE 2", 1)
+    DeleteItemsInCart()
+    #AddItemToCart("HAIBIKE 2", 1)
     #UpdateQtyOfItem("HAIBIKE 2", 2)
 
     # DeleteSpecificItemFromCart(db_instant, itemID)
@@ -90,6 +90,7 @@ class Cart_Model
     end
   end
 
+  #Just used by test  for now
   def UpdateQtyOfItem(itemName, quantity)
     inventory = @@db_instant.GetAllInventoryItemsByFilters(itemName)
     bExist = false
