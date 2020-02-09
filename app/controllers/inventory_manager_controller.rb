@@ -12,6 +12,7 @@ class Inventory_Controller
     @@products_Instance.Init
   end
 
+  # PRODUCT table helper methods
   #Get Products in table format, so that it can be rendered at the terminal view
   def GetAllTheProduct(sortBy = "")
     @@productsList = @@products_Instance.GetAllProducts
@@ -25,6 +26,18 @@ class Inventory_Controller
     return Terminal::Table.new :title => "Products", :headings => ["ID", "Name", "Description"], :rows => tableRows
   end
 
+  def IsValidProductID(param_ID)
+    # return @@productsList.select { |key, value| key < "b" }
+    @@productsList.each do |item|
+      itemID = item["item_id"]
+      if itemID == param_ID
+        return true
+      end
+    end
+    return false
+  end
+
+  # INVENTORY table helper methods
   #Sortby contains column name by which data is requested to be sorted , by default, its empty, meaning data will be sorted by item id
   #returns tabular form
   def PopulateInventoryTable(sortBy = "")
@@ -39,7 +52,31 @@ class Inventory_Controller
 
       tableRows << [itemID, name, iPrice, qty, extraNotes]
     end
-
     return Terminal::Table.new :title => "Inventory", :headings => ["ID", "Name", "Price", "Quantity", "Extra Notes"], :rows => tableRows
+  end
+
+  def UpdateInventoryItem(item_id, price = -1, quantity = -1, extraNotes = "")
+    @@inventory_Instance.UpdateInvetoryItem(item_id, price, quantity, extraNotes)
+  end
+
+  def ExistInInventory(param_ID)
+    @@inventory_itemsList.each do |item|
+      itemID = item["item_id"]
+      if itemID == param_ID
+        return true
+      end
+    end
+    return false
+  end
+
+  def GetItemQuantityInInventory(param_ID)
+    @@inventory_itemsList.each do |item|
+      itemID = item["item_id"]
+      qty = item["quantity"]
+      if itemID == param_ID
+        return qty.to_i
+      end
+    end
+    return -1
   end
 end

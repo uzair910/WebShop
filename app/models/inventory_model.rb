@@ -14,6 +14,10 @@ class Inventory_Model
     @@db_instant.InsertOrUpdateItemInInventory(item_id, price, quantity, extraNotes)
   end
 
+  def UpdateInvetoryItem(item_id, price, quantity, extraNotes)
+    @@db_instant.InsertOrUpdateItemInInventory(item_id, price, quantity, extraNotes)
+  end
+
   def UpdateItemPrice(item_id, price)
     @@db_instant.UpdateItemPrice(item_id, price)
   end
@@ -40,7 +44,7 @@ class Inventory_Model
   def InventoryTableTest()
     puts "\n Inventory:"
     Init()
-    #UpdateItemPrice(3, 1500)
+    #DeleteInventoryItem(3)
     #AddItemInInventory("Hawkers Glasses", 40, 19.99, "best biking glasses")
     ViewInventory()
   end
@@ -62,8 +66,8 @@ class Inventory_Model
   end
 
   def ViewInventory()
-    #itemInInventory = @@db_instant.GetAllInventoryItems
-    itemInInventory = @@db_instant.GetAllInventoryItemsByFilters("", 2)
+    itemInInventory = @@db_instant.GetAllInventoryItems
+    #itemInInventory = @@db_instant.GetAllInventoryItemsByFilters("", 2)
     # puts "Fetched inventory"
     bExist = false
     itemInInventory.each do |item|
@@ -88,4 +92,4 @@ class Inventory_Model
   end
 end
 
-#Inventory_Model.new.InventoryTableTest # To run test , to check if model is correctly interacting with DB
+Inventory_Model.new.InventoryTableTest # To run test , to check if model is correctly interacting with DB

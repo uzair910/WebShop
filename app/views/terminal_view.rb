@@ -3,29 +3,47 @@ require_relative "./shopping_view.rb"
 require_relative "./management_view.rb"
 
 class Termainal_View
+  @@options = "\nPress 1 to shop\nPress 2 to manage inventory\nPress 3 to exit\nPress P (at any time) to set items to view per page\n" +
+              "Press A (at any time) see the table/Options for that module again"   #by default, view all items in one page"
+
   def Init()
     managementView = Management_View.new
     puts "\n\n\t\tWelcome to terminal edition of Kwiki Mart"
 
+    puts @@options
     input = 0
+
     while true
-      puts "\nPress 1 to shop\nPress 2 to manage inventory\nPress 3 to exit\nPress H to for help/shortcut keys (Pagination etc)"
+      bDisplayInvalidOption = false # display text if invalid option is selected
       input = gets.chomp
-      bIsIntegerEntered = Integer(input) rescue false # try catch equilent to see if input is integer or string
+      bIsIntegerEntered = Integer(input) rescue false # try catch equilent to see whether input is integer or string
       if bIsIntegerEntered
+        #  break if input.to_i == 3
         if input.to_i == 1 # TODO
           #view list..
-        elsif input.to_i == 2  # Under Progress
+        elsif input.to_i == 2 # Under Progress
           # to management panel
           managementView.Init
           managementView.Run
+        elsif input.to_i == 3
+          break
+        else
+          bDisplayInvalidOption = true
+        end
+      else
+        if input.to_s.upcase3 == "P"
+          puts "PAGINATION"  #Todo
+        elsif input.to_s.upcase3 == "A"
+          puts @@options #Todo
+        else
+          bDisplayInvalidOption = true
         end
       end
-    else
-      if input.to_s.upcase3 == "H"
-        puts "Show Help"  #Todo
-      else
+      if bDisplayInvalidOption
+        print "Invalid option, try again: "
+      end
     end
+
     puts "Goodbye! Come again!"
     return
   end
