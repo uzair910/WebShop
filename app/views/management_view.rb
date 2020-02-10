@@ -21,6 +21,7 @@ class Management_View
                                 "Press 1 to MANAGE Products\n" +
                                 "Press 2 to ADD/UPDATE item in Inventory\n" +
                                 "Press 3 Delete Items from Inventory\n"
+
     FetchProduct()
   end
 
@@ -56,8 +57,8 @@ class Management_View
         if input.to_s.upcase == "S" #DONE
           SortInventory()
           bShowOptionsAgain = true
-        elsif input.to_s.upcase == "F" #Todo
-          puts "Filtering TIME"
+        elsif input.to_s.upcase == "F" #In progress
+          FilterInventory()
         elsif input.to_s.upcase == "P" #Todo
           puts "PAGINATION"
         elsif input.to_s.upcase == "A"
@@ -74,7 +75,6 @@ class Management_View
 
   #region Product Management
   def ProductManagement
-    puts "In productManagement"
     productManagementView = Prodcut_Management_View.new
     productManagementView.Run(@@product_table)
   end
@@ -90,8 +90,46 @@ class Management_View
   end
 
   #regiion Inventory Management
+
+  def FilterInventory
+    puts @@commonFunctions.GetFilterOptions(@@commonFunctions.Table_Inventory)
+    print "Type your option: (or press 'B' to go back) "
+    optionSelected = gets.chomp
+    columnSelected = @@commonFunctions.GetFilterColumnName(optionSelected, @@commonFunctions.Table_Inventory)
+    bSortOrderAscending = true
+    if columnSelected.upcase != @@commonFunctions.Column_Invalid
+      productStartPrice = -1
+      productEndPrice = -1
+      productName = ""
+      if @@commonFunctions.bIsNumericCol(columnSelected.upcase) #columnSelected.upcase != @@commonFunctions.Column_Price #If price selected, need to get start and end price.
+        print "Enter Minimum value (you can leave it empty): "
+        begin
+          productStartPrice = Float(gets.chomp)
+        rescue
+          productStartPrice = -1
+        end
+        print "Enter Maximum value (you can leave it empty): "
+        begin
+          productEndPrice = Float(gets.chomp)
+        rescue
+          productEndPrice = -1
+        end
+      else
+        # name.. get name...
+        print "Enter text: "
+        productName = gets.chomp
+      end
+      #Lets filter:
+      @@inventory_Table = @@inventory_Controller.FilterByColumn(columnSelected, productName, productStartPrice, productEndPrice)
+      DisplayInventoryTable()
+    else
+      puts "Cannont sort based on your selection. try again"
+    end
+  end
+
   def SortInventory()
     puts @@commonFunctions.GetSortTableList(@@commonFunctions.Table_Inventory)
+    print "Type your option: (or press 'B' to go back) "
     optionSelected = gets.chomp
     columnSelected = @@commonFunctions.GetSortedColumnName(optionSelected, @@commonFunctions.Table_Inventory)
     bSortOrderAscending = true

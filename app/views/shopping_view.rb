@@ -53,12 +53,12 @@ class Shopping_Cart_View
         if input.to_s.upcase == "P"
           puts "PAGINATION"  #Todo
         elsif input.to_s.upcase == "A"
-          DisplayCartItems()
         elsif input.to_s.upcase == "C"
           DisplayCartItems()
         elsif input.to_s.upcase == "I"
           DisplayInventoryTable()
         elsif input.to_s.upcase == "F"
+          FilterCart()
         elsif input.to_s.upcase == "S"
           SortCart()
         else
@@ -68,6 +68,7 @@ class Shopping_Cart_View
       if bDisplayInvalidOption
         print "Invalid option, try again: "
       else
+        DisplayCartItems()
         puts @@DisplayManagementOption
         print "Enter choice: "
       end
@@ -199,6 +200,7 @@ class Shopping_Cart_View
 
   def DisplaySortOption()
     puts @@commonFunctions.GetSortTableList(@@commonFunctions.Table_Cart)
+    print "Type your option: (or press 'B' to go back) "
     optionSelected = gets.chomp
     columnSelected = @@commonFunctions.GetSortedColumnName(optionSelected, @@commonFunctions.Table_Cart)
     bSortOrderAscending = true
@@ -213,6 +215,42 @@ class Shopping_Cart_View
       end
       @@cart_table = @@cart_Controller.SortByColumn(columnSelected, bSortOrderAscending)
       @@cart_table = @@cart_Controller.GetCartTable() #refecth the table..
+      DisplayCartItems()
+    else
+      puts "Cannont sort based on your selection. try again"
+    end
+  end
+
+  def FilterCart
+    puts @@commonFunctions.GetFilterOptions(@@commonFunctions.Table_Cart)
+    print "Type your option: (or press 'B' to go back) "
+    optionSelected = gets.chomp
+    columnSelected = @@commonFunctions.GetFilterColumnName(optionSelected, @@commonFunctions.Table_Cart)
+    bSortOrderAscending = true
+    if columnSelected.upcase != @@commonFunctions.Column_Invalid
+      productStartPrice = -1
+      productEndPrice = -1
+      productName = ""
+      if @@commonFunctions.bIsNumericCol(columnSelected.upcase) #columnSelected.upcase != @@commonFunctions.Column_Price #If price selected, need to get start and end price.
+        print "Enter Minimum value (you can leave it empty): "
+        begin
+          productStartPrice = Float(gets.chomp)
+        rescue
+          productStartPrice = -1
+        end
+        print "Enter Maximum value (you can leave it empty): "
+        begin
+          productEndPrice = Float(gets.chomp)
+        rescue
+          productEndPrice = -1
+        end
+      else
+        # name.. get name...
+        print "Enter text: "
+        productName = gets.chomp
+      end
+      #Lets filter:
+      @@cart_table = @@cart_Controller.FilterByColumn(columnSelected, productName, productStartPrice, productEndPrice)
       DisplayCartItems()
     else
       puts "Cannont sort based on your selection. try again"

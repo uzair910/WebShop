@@ -1,4 +1,5 @@
 class CommonFunctions
+  ###########################################################################   DECLARATION
   @@table_Cart = "CART"
   @@table_Inventory = "INVENTORY"
   @@table_Products = "PRODUCT"
@@ -11,7 +12,47 @@ class CommonFunctions
   @@COLUMN_TOTAL_PRICE = "TOTAL_PRICE"
   @@COLUMN_EXTRANOTES = "EXTRANOTES"
   @@COLUMN_DESCRIPTION = "DESCIPTION"
-  @@COLUMN_INVALID = "Invalid" # to handle errors
+  @@COLUMN_INVALID = "INVALID" # to handle errors
+
+  def SortOption_Cart()
+    return "\tPress '1' to SORT by IDs\n" +
+             "\tPress '2' to SORT by Price\n" +
+             "\tPress '3' to SORT by  Quantity\n" +
+             "\tPress '4' to SORT by  Name"
+  end
+
+  def SortOption_Product
+    return "\tPress '1' to SORT by IDs\n" +
+             "\tPress '2' to SORT by Name\n" +
+             "\tPress '3' to SORT by Description"
+  end
+
+  def SortOption_Inventory
+    return "\tPress '1' to SORT by IDs\n" +
+             "\tPress '2' to SORT by Name\n" +
+             "\tPress '3' to SORT by Price\n" +
+             "\tPress '4' to SORT by Quantity"
+  end
+
+  def FilterOption_Inventory
+    return "\tPress '1' to Filter by Names\n" +
+             "\tPress '2' to Filter by Price\n" +
+             "\tPress '3' to Filte by Quantity\n"
+    # +            "\tPress '4' to SORT by Extra Text"
+  end
+
+  def FilterOption_Cart
+    return "\tPress '1' to Filter by Names\n" +
+             "\tPress '2' to Filter by Price\n" +
+             "\tPress '3' to SORT by Quantity"
+    #  "\tPress '4' to SORT by Quantity"
+  end
+
+  def FilterOption_Product
+    return "\tPress '1' to Filter by Names\n" +
+             "\tPress '2' to Filter by Description"
+    #  "\tPress '4' to SORT by Quantity"
+  end
 
   #getters
   def Table_Cart
@@ -30,8 +71,18 @@ class CommonFunctions
     @@COLUMN_INVALID.upcase
   end
 
+  # need for sorting...
+  def Column_Price
+    @@COLUMN_PRICE.upcase
+  end
+
+  def Column_Name
+    @@COLUMN_NAME.upcase
+  end
+
+  ####################################################################    METHODS
   def bIsNumericCol(columnName)
-    case columnName
+    case columnName.upcase
     when @@COLUMN_ITEMID, @@COLUMN_PRICE, @@COLUMN_QUANTITY, @@COLUMN_TOTAL_PRICE
       return true
     end
@@ -56,7 +107,39 @@ class CommonFunctions
     end
   end
 
-  #Methods
+  #GENERIC Fiter METHOD
+  def GetFilteredList(itemList, columnName, name, minValue, maxValue)
+    #Checks is column is text or numeric
+    if bIsNumericCol(columnName) #filter by range
+      if maxValue < 0
+        maxValue = Integer::MAX
+      end
+      if minValue < 0
+        minValue = 0
+      end
+      itemList = itemList.select { |k| minValue <= Float(k["#{columnName.downcase}"]) && Float(k["#{columnName.downcase}"]) <= maxValue }
+    else #filter by text, like
+      itemList = itemList.select { |item| item["#{columnName.downcase}"].downcase.include? name.downcase }
+    end
+    itemList.each do |item|
+      puts "#{item}"
+    end
+    return itemList
+  end
+
+  def GetFilterOptions(table_name)
+    case table_name.to_s.upcase
+    when @@table_Cart.to_s
+      return FilterOption_Cart()
+    when @@table_Inventory.to_s
+      return FilterOption_Inventory()
+    when @@table_Products
+      return FilterOption_Product()
+    else
+      "Error: Not a valid table name"
+    end
+  end
+
   def GetSortTableList(table_name)
     case table_name.to_s.upcase
     when @@table_Cart.to_s
@@ -65,6 +148,19 @@ class CommonFunctions
       return SortOption_Inventory()
     when @@table_Products
       return SortOption_Product()
+    else
+      "Error: Not a valid table name"
+    end
+  end
+
+  def GetFilterColumnName(optionSelected, table_name)
+    case table_name.to_s.upcase
+    when @@table_Cart.to_s
+      return GetFilterColumnNameForCart(optionSelected)
+    when @@table_Inventory.to_s
+      return GetFilterColumnNameForInventory(optionSelected)
+    when @@table_Products.to_s
+      return GetFilterColumnNameForProduct(optionSelected)
     else
       "Error: Not a valid table name"
     end
@@ -83,11 +179,21 @@ class CommonFunctions
     end
   end
 
-  def SortOption_Cart()
-    return "\tPress '1' to SORT by IDs\n" +
-             "\tPress '2' to SORT by Price\n" +
-             "\tPress '3' to SORT by  Quantity\n" +
-             "\tPress '4' to SORT by  Name"
+  def GetFilterColumnNameForCart(optionSelected)
+    begin
+      case optionSelected.to_i
+      when 1
+        return @@COLUMN_NAME
+      when 2
+        return @@COLUMN_PRICE
+      when 3
+        return @@COLUMN_QUANTITY
+      else
+        return "Invalid"
+      end
+    rescue
+      return "Invalid"
+    end
   end
 
   def GetSelectColumnNameForCart(optionSelected)
@@ -109,11 +215,38 @@ class CommonFunctions
     end
   end
 
-  def SortOption_Inventory
-    return "\tPress '1' to SORT by IDs\n" +
-             "\tPress '2' to SORT by Name\n" +
-             "\tPress '3' to SORT by Price\n" +
-             "\tPress '4' to SORT by Quantity"
+  def GetFilterColumnNameForInventory(optionSelected)
+    begin
+      case optionSelected.to_i
+      when 1
+        return @@COLUMN_NAME
+      when 2
+        return @@COLUMN_PRICE
+      when 3
+        return @@COLUMN_QUANTITY
+      when 4
+        return @@COLUMN_EXTRANOTES
+      else
+        return "Invalid"
+      end
+    rescue
+      return "Invalid"
+    end
+  end
+
+  def GetFilterColumnNameForProduct(optionSelected)
+    begin
+      case optionSelected.to_i
+      when 1
+        return @@COLUMN_NAME
+      when 2
+        return @@COLUMN_DESCRIPTION
+      else
+        return "Invalid"
+      end
+    rescue
+      return "Invalid"
+    end
   end
 
   def GetSelectColumnNameForInventory(optionSelected)
@@ -137,12 +270,6 @@ class CommonFunctions
     end
   end
 
-  def SortOption_Product
-    return "\tPress '1' to SORT by IDs\n" +
-             "\tPress '2' to SORT by Name\n" +
-             "\tPress '3' to SORT by Description"
-  end
-
   def GetSelectColumnNameForProduct(optionSelected)
     begin
       case optionSelected.to_i
@@ -160,4 +287,13 @@ class CommonFunctions
       return "Invalid"
     end
   end
+end
+
+#helper class ... For sorting, if max range is not given, then set to to max possible value..
+#src="https://gist.github.com/pithyless/9738125.js"
+class Integer
+  N_BYTES = [42].pack("i").size
+  N_BITS = N_BYTES * 16
+  MAX = 2 ** (N_BITS - 2) - 1
+  MIN = -MAX - 1
 end

@@ -38,7 +38,7 @@ class Prodcut_Management_View
           AddProduct()
           bAskAgain = true
         when 2
-          # UPDATE                    #TODO
+          # UPDATE                    #done
           UpdateProduct()
           bAskAgain = true
         when 3
@@ -56,6 +56,9 @@ class Prodcut_Management_View
           bAskAgain = true
         elsif input.to_s.upcase == "S"
           SortProducts()
+          bAskAgain = true
+        elsif input.to_s.upcase == "F"
+          FilterProducts()
           bAskAgain = true
         else
           print "You enetered an invalid option. Try again or press 'A' to see the options again: "
@@ -105,14 +108,9 @@ class Prodcut_Management_View
           next
         end
       end
-
       #Can update product now, since now we know the ITEM ID..lets fetch the product name and description
       print "\tEnter new Product Name (leave empty if you dont want to update the name): "
       newProductName = gets.chomp
-      # if newProductName.nil? || newProductName.empty? #incase user searched with id, this will be
-      #   puts "\tName cannot be empty. Lets try again.."
-      #   next
-      # end
       print "\tEnter new Product Description: "
       newDescription = gets.chomp
       if @@inventory_Controller.UpdateProduct(productID, newProductName, newDescription)
@@ -222,6 +220,7 @@ class Prodcut_Management_View
 
   def DisplaySortOption()
     puts @@commonFunctions.GetSortTableList(@@commonFunctions.Table_Products)
+    print "Type your option: (or press 'B' to go back) "
     optionSelected = gets.chomp
     columnSelected = @@commonFunctions.GetSortedColumnName(optionSelected, @@commonFunctions.Table_Products)
     bSortOrderAscending = true
@@ -234,11 +233,45 @@ class Prodcut_Management_View
         end
       rescue
       end
-      @@product_table = @@inventory_Controller.SortProductByColumn(columnSelected, bSortOrderAscending)
+      @@product_table = @@inventory_Controller.SortByColumn(columnSelected, bSortOrderAscending, false)
       # @@product_table = @@inventory_Controller.GetProductTable() #refecth the table..
       # @@product_table.each do |item|
       #   puts "#{item}"
       # end
+      DisplayTable()
+    else
+      puts "Cannont sort based on your selection. try again"
+    end
+  end
+
+  def FilterProducts
+    #filter available on col name only (for this table)
+    columnSelected = @@commonFunctions.Column_Name
+    bSortOrderAscending = true
+    if columnSelected.upcase != @@commonFunctions.Column_Invalid
+      productStartPrice = -1
+      productEndPrice = -1
+      productName = ""
+      if @@commonFunctions.bIsNumericCol(columnSelected.upcase) #columnSelected.upcase != @@commonFunctions.Column_Price #If price selected, need to get start and end price.
+        print "Enter Minimum value (you can leave it empty): "
+        begin
+          productStartPrice = Float(gets.chomp)
+        rescue
+          productStartPrice = -1
+        end
+        print "Enter Maximum value (you can leave it empty): "
+        begin
+          productEndPrice = Float(gets.chomp)
+        rescue
+          productEndPrice = -1
+        end
+      else
+        # name.. get name...
+        print "Enter text: "
+        productName = gets.chomp
+      end
+      #Lets filter:
+      @@product_table = @@inventory_Controller.FilterByColumn(columnSelected, productName, productStartPrice, productEndPrice, false)
       DisplayTable()
     else
       puts "Cannont sort based on your selection. try again"

@@ -116,4 +116,9 @@ class Shopping_Cart_Controller
   def GetItemQuantityInInventory(item_id)
     return @@inventory_Controller.GetItemQuantityInInventory(item_id.to_i)
   end
+
+  def FilterByColumn(columnSelected, name, minValue, maxValue)
+    @@cartList = @@commonFunctions.GetFilteredList(@@cartList, columnSelected, name, minValue, maxValue)
+    return GetCartTable()
+  end
 end

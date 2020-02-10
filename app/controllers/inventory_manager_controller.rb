@@ -160,17 +160,32 @@ class Inventory_Controller
     return -1
   end
 
-  def SortProductByColumn(columnName, bAsc = true)
-    @@productsList = @@commonFunctions.GetSortedList(@@productsList, columnName, bAsc)
+  # def SortProductByColumn(columnName, bAsc = true)
+  #   @@productsList = @@commonFunctions.GetSortedList(@@productsList, columnName, bAsc)
+  #   @@sort_Column = columnName # need to store the state for the column
+  #   @@bAscSort_order = bAsc
+  #   return GetProductTable()
+  # end
+
+  def SortByColumn(columnName, bAsc = true, bFromInventoryView = true)
     @@sort_Column = columnName # need to store the state for the column
     @@bAscSort_order = bAsc
-    return GetProductTable()
+    if bFromInventoryView
+      @@inventory_itemsList = @@commonFunctions.GetSortedList(@@inventory_itemsList, columnName, bAsc)
+      return GetInventoryTable()
+    else
+      @@productsList = @@commonFunctions.GetSortedList(@@productsList, columnName, bAsc)
+      return GetProductTable()
+    end
   end
 
-  def SortByColumn(columnName, bAsc = true)
-    @@inventory_itemsList = @@commonFunctions.GetSortedList(@@inventory_itemsList, columnName, bAsc)
-    @@sort_Column = columnName # need to store the state for the column
-    @@bAscSort_order = bAsc
-    return GetInventoryTable()
+  def FilterByColumn(columnSelected, name, minValue, maxValue, bFromInventoryView = true)
+    if bFromInventoryView
+      @@inventory_itemsList = @@commonFunctions.GetFilteredList(@@inventory_itemsList, columnSelected, name, minValue, maxValue)
+      return GetInventoryTable()
+    else
+      @@productsList = @@commonFunctions.GetFilteredList(@@productsList, columnSelected, name, minValue, maxValue)
+      return GetProductTable()
+    end
   end
 end
