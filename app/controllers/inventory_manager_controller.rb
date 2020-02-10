@@ -86,7 +86,16 @@ class Inventory_Controller
       description = item["desciption"]
       tableRows << [itemID, name, description]
     end
+    DisplaySortInformation()
+
     return Terminal::Table.new :title => "Products", :headings => ["ID", "Name", "Description"], :rows => tableRows
+  end
+
+  def DisplaySortInformation()
+    if !@@sort_Column.empty?
+      sort_order = @@bAscSort_order ? "Ascending" : "Descending"
+      puts "Sort On Column: #{@@sort_Column}, order: (#{sort_order})"
+    end
   end
 
   # INVENTORY table helper methods
@@ -110,6 +119,7 @@ class Inventory_Controller
       extraNotes = item["extraNotes"]
       tableRows << [itemID, name, iPrice, qty, extraNotes]
     end
+    DisplaySortInformation()
     return Terminal::Table.new :title => "Inventory", :headings => ["ID", "Name", "Price (Euros)", "Quantity", "Extra Notes"], :rows => tableRows
   end
 

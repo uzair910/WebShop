@@ -16,7 +16,7 @@ class Management_View
     @@inventory_Controller.Init
     # would be required again at multiple places so rather declare it globally (IDEALLY should be a private cosnt : NTS : Check if possible)
     @@DisplayManagementOption = "\nPress 'S' to SORT items in the table\n" +
-                                "Press 'F' to FILTER items by price\n" +
+                                "Press 'F' to FILTER items \n" +
                                 "Press 'B' to go back to main page\n" +
                                 "Press 1 to MANAGE Products\n" +
                                 "Press 2 to ADD/UPDATE item in Inventory\n" +
@@ -53,7 +53,7 @@ class Management_View
         end
       else
         break if input.to_s.upcase == "B"
-        if input.to_s.upcase == "S" #In progress
+        if input.to_s.upcase == "S" #DONE
           SortInventory()
           bShowOptionsAgain = true
         elsif input.to_s.upcase == "F" #Todo
@@ -106,7 +106,6 @@ class Management_View
       end
       @@inventory_Table = @@inventory_Controller.SortByColumn(columnSelected, bSortOrderAscending)
       DisplayInventoryTable()
-      puts "Sort Complete"
     else
       puts "Cannont sort based on your selection. try again"
     end
