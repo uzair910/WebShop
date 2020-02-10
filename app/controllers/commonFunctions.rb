@@ -9,7 +9,10 @@ class CommonFunctions
   @@COLUMN_QUANTITY = "QUANTITY"
   @@COLUMN_NAME = "NAME"
   @@COLUMN_TOTAL_PRICE = "TOTAL_PRICE"
-  @@COLUMN_INVALID = "Invalid"
+  @@COLUMN_EXTRANOTES = "EXTRANOTES"
+
+  @@COLUMN_INVALID = "Invalid" # to handle errors
+
   #getters
   def Table_Cart
     return @@table_Cart.upcase
@@ -42,7 +45,7 @@ class CommonFunctions
     when @@table_Cart.to_s
       return SortOption_Cart()
     when @@table_Inventory.to_s
-      return "Inventory"
+      return SortOption_Inventory()
     when @@table_Products
       return "Products"
     else
@@ -55,7 +58,7 @@ class CommonFunctions
     when @@table_Cart.to_s
       return GetSelectColumnNameForCart(optionSelected)
     when @@table_Inventory.to_s
-      return "Inventory"
+      return GetSelectColumnNameForInventory(optionSelected)
     when @@table_Products
       return "Products"
     else
@@ -84,6 +87,34 @@ class CommonFunctions
         return @@COLUMN_TOTAL_PRICE
       when 5
         return @@COLUMN_NAME
+      else
+        return "Invalid"
+      end
+    rescue
+      return "Invalid"
+    end
+  end
+
+  def SortOption_Inventory
+    return "\tPress '1' to SORT by IDs\n" +
+             "\tPress '2' to SORT by Name\n" +
+             "\tPress '3' to SORT by Price\n" +
+             "\tPress '4' to SORT by Quantity"
+  end
+
+  def GetSelectColumnNameForInventory(optionSelected)
+    begin
+      case optionSelected.to_i
+      when 1
+        return @@COLUMN_ITEMID
+      when 2
+        return @@COLUMN_NAME
+      when 3
+        return @@COLUMN_PRICE
+      when 4
+        return @@COLUMN_QUANTITY
+      when 5
+        return @@COLUMN_EXTRANOTES
       else
         return "Invalid"
       end

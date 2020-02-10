@@ -39,10 +39,10 @@ class Shopping_Cart_View
         if input.to_i == 1 # DONE
           # to the shopping cart
           AddItemsToCart()
-        elsif input.to_i == 2 # DELETE In progres
+        elsif input.to_i == 2 # Done
           # to management panel
           DeleteItem()
-        elsif input.to_i == 3 # DELETE In progres
+        elsif input.to_i == 3 # Done
           # to management panel
           DeleteItem(true)
         else

@@ -1,15 +1,24 @@
 require_relative "../models/inventory_model.rb"
 require_relative "../models/product_model.rb"
+require_relative "../controllers/commonFunctions.rb"
+
 #Controller for handling Products and Inventories.
 class Inventory_Controller
   @@inventory_Instance = Inventory_Model.new
   @@products_Instance = Product_Model.new
+
+  @@commonFunctions = CommonFunctions.new
   @@inventory_itemsList = []
   @@productsList = []
+
+  # to keep track of sort column and sort order
+  @@sort_Column = "" # need to store the state for the column
+  @@bAscSort_order = true
 
   def Init()
     @@inventory_Instance.Init
     @@products_Instance.Init
+    @@sort_Column = ""
   end
 
   # PRODUCT table helper methods
@@ -81,6 +90,13 @@ class Inventory_Controller
   #returns tabular form
   def PopulateInventoryTable(sortBy = "")
     @@inventory_itemsList = @@inventory_Instance.GetAllInventoryItems
+    if !@@sort_Column.empty?
+      SortByColumn(@@sort_Column, @@bAscSort_order)
+    end
+    return GetInventoryTable()
+  end
+
+  def GetInventoryTable()
     tableRows = []
     @@inventory_itemsList.each do |item|
       itemID = item["item_id"]
@@ -129,5 +145,15 @@ class Inventory_Controller
       end
     end
     return -1
+  end
+
+  def SortByColumn(columnName, bAsc = true)
+    @@inventory_itemsList = @@commonFunctions.GetSortedList(@@inventory_itemsList, columnName, bAsc)
+    # @@inventory_itemsList.each do |item|
+    #   puts "#{item}"
+    # end
+    @@sort_Column = columnName # need to store the state for the column
+    @@bAscSort_order = bAsc
+    return GetInventoryTable()
   end
 end

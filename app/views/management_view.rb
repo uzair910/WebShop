@@ -1,9 +1,11 @@
 require_relative "../controllers/inventory_manager_controller.rb"
 require "terminal-table"
 require_relative "./product_management_view.rb"
+require_relative "../controllers/commonFunctions.rb"
 
 class Management_View
   @@inventory_Controller = Inventory_Controller.new
+  @@commonFunctions = CommonFunctions.new
 
   @@DisplayManagementOption = ""
   @@inventory_Table = []
@@ -51,8 +53,9 @@ class Management_View
         end
       else
         break if input.to_s.upcase == "B"
-        if input.to_s.upcase == "S" #Todo
-          puts " SORTING TIME."
+        if input.to_s.upcase == "S" #In progress
+          SortInventory()
+          bShowOptionsAgain = true
         elsif input.to_s.upcase == "F" #Todo
           puts "Filtering TIME"
         elsif input.to_s.upcase == "P" #Todo
@@ -87,6 +90,28 @@ class Management_View
   end
 
   #regiion Inventory Management
+  def SortInventory()
+    puts @@commonFunctions.GetSortTableList(@@commonFunctions.Table_Inventory)
+    optionSelected = gets.chomp
+    columnSelected = @@commonFunctions.GetSortedColumnName(optionSelected, @@commonFunctions.Table_Inventory)
+    bSortOrderAscending = true
+    if columnSelected.upcase != @@commonFunctions.Column_Invalid
+      print "Inorder to sort in descending order, press 'D' (press any other key to continue): "
+      sortOrder = gets.chomp
+      begin
+        if sortOrder.upcase.to_s == "D"
+          bSortOrderAscending = false
+        end
+      rescue
+      end
+      @@inventory_Table = @@inventory_Controller.SortByColumn(columnSelected, bSortOrderAscending)
+      DisplayInventoryTable()
+      puts "Sort Complete"
+    else
+      puts "Cannont sort based on your selection. try again"
+    end
+  end
+
   def DisplayInventoryTable()
     puts @@inventory_Table
   end
