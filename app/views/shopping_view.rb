@@ -184,10 +184,6 @@ class Shopping_Cart_View
     end
   end
 
-  def SortCart()
-    DisplaySortOption()
-  end
-
   #Region CART
   def LoadCartItem()
     @@cart_table = @@cart_Controller.PopulateCartTable() #refecth the table..
@@ -195,6 +191,10 @@ class Shopping_Cart_View
 
   def DisplayCartItems()
     puts @@cart_table
+  end
+
+  def SortCart()
+    DisplaySortOption()
   end
 
   def DisplaySortOption()

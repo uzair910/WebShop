@@ -25,14 +25,7 @@ class Inventory_Controller
   #Get Products in table format, so that it can be rendered at the terminal view
   def GetAllTheProduct(sortBy = "")
     @@productsList = @@products_Instance.GetAllProducts
-    tableRows = []
-    @@productsList.each do |item|
-      itemID = item["item_id"]
-      name = item["name"]
-      description = item["desciption"]
-      tableRows << [itemID, name, description]
-    end
-    return Terminal::Table.new :title => "Products", :headings => ["ID", "Name", "Description"], :rows => tableRows
+    return GetProductTable()
   end
 
   def IsValidProductID(param_ID)
@@ -85,6 +78,17 @@ class Inventory_Controller
     return -1
   end
 
+  def GetProductTable()
+    tableRows = []
+    @@productsList.each do |item|
+      itemID = item["item_id"]
+      name = item["name"]
+      description = item["desciption"]
+      tableRows << [itemID, name, description]
+    end
+    return Terminal::Table.new :title => "Products", :headings => ["ID", "Name", "Description"], :rows => tableRows
+  end
+
   # INVENTORY table helper methods
   #Sortby contains column name by which data is requested to be sorted , by default, its empty, meaning data will be sorted by item id
   #returns tabular form
@@ -104,7 +108,6 @@ class Inventory_Controller
       qty = item["quantity"]
       iPrice = item["price"]
       extraNotes = item["extraNotes"]
-
       tableRows << [itemID, name, iPrice, qty, extraNotes]
     end
     return Terminal::Table.new :title => "Inventory", :headings => ["ID", "Name", "Price (Euros)", "Quantity", "Extra Notes"], :rows => tableRows
@@ -147,11 +150,15 @@ class Inventory_Controller
     return -1
   end
 
+  def SortProductByColumn(columnName, bAsc = true)
+    @@productsList = @@commonFunctions.GetSortedList(@@productsList, columnName, bAsc)
+    @@sort_Column = columnName # need to store the state for the column
+    @@bAscSort_order = bAsc
+    return GetProductTable()
+  end
+
   def SortByColumn(columnName, bAsc = true)
     @@inventory_itemsList = @@commonFunctions.GetSortedList(@@inventory_itemsList, columnName, bAsc)
-    # @@inventory_itemsList.each do |item|
-    #   puts "#{item}"
-    # end
     @@sort_Column = columnName # need to store the state for the column
     @@bAscSort_order = bAsc
     return GetInventoryTable()

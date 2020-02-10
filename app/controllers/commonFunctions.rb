@@ -1,7 +1,7 @@
 class CommonFunctions
   @@table_Cart = "CART"
   @@table_Inventory = "INVENTORY"
-  @@table_Products = "PRODUCTS"
+  @@table_Products = "PRODUCT"
 
   #Columns definition
   @@COLUMN_ITEMID = "ITEM_ID"
@@ -10,7 +10,7 @@ class CommonFunctions
   @@COLUMN_NAME = "NAME"
   @@COLUMN_TOTAL_PRICE = "TOTAL_PRICE"
   @@COLUMN_EXTRANOTES = "EXTRANOTES"
-
+  @@COLUMN_DESCRIPTION = "DESCIPTION"
   @@COLUMN_INVALID = "Invalid" # to handle errors
 
   #getters
@@ -30,12 +30,29 @@ class CommonFunctions
     @@COLUMN_INVALID.upcase
   end
 
+  def bIsNumericCol(columnName)
+    case columnName
+    when @@COLUMN_ITEMID, @@COLUMN_PRICE, @@COLUMN_QUANTITY, @@COLUMN_TOTAL_PRICE
+      return true
+    end
+    return false
+  end
+
   #GENERIC SORTING METHOD
   def GetSortedList(itemList, columnName, bAsc)
-    if bAsc #ascending order
-      return itemList.sort_by { |k| k["#{columnName.downcase}"] }
-    else #descending order
-      return itemList.sort_by { |k| k["#{columnName.downcase}"] }.reverse!
+    #Checks is column is text or numeric
+    if bIsNumericCol(columnName)
+      if bAsc #ascending order
+        return itemList.sort_by { |k| k["#{columnName.downcase}"] }
+      else #descending order
+        return itemList.sort_by { |k| k["#{columnName.downcase}"] }.reverse!
+      end
+    else
+      if bAsc #ascending order                          |a,b| a['name']<=>b['name']
+        return itemList.sort! { |a, b| a["#{columnName.downcase}"].downcase <=> b["#{columnName.downcase}"].downcase }
+      else #descending order
+        return itemList.sort! { |a, b| a["#{columnName.downcase}"].downcase <=> b["#{columnName.downcase}"].downcase }.reverse!
+      end
     end
   end
 
@@ -47,7 +64,7 @@ class CommonFunctions
     when @@table_Inventory.to_s
       return SortOption_Inventory()
     when @@table_Products
-      return "Products"
+      return SortOption_Product()
     else
       "Error: Not a valid table name"
     end
@@ -59,8 +76,8 @@ class CommonFunctions
       return GetSelectColumnNameForCart(optionSelected)
     when @@table_Inventory.to_s
       return GetSelectColumnNameForInventory(optionSelected)
-    when @@table_Products
-      return "Products"
+    when @@table_Products.to_s
+      return GetSelectColumnNameForProduct(optionSelected)
     else
       "Error: Not a valid table name"
     end
@@ -70,8 +87,7 @@ class CommonFunctions
     return "\tPress '1' to SORT by IDs\n" +
              "\tPress '2' to SORT by Price\n" +
              "\tPress '3' to SORT by  Quantity\n" +
-             #  "\tPress '4' to SORT by  Total Price\n" + #not working atm, because we dont have column with the same name, PHASE 4
-             "\tPress '5' to SORT by  Name"
+             "\tPress '4' to SORT by  Name"
   end
 
   def GetSelectColumnNameForCart(optionSelected)
@@ -84,8 +100,6 @@ class CommonFunctions
       when 3
         return @@COLUMN_QUANTITY
       when 4
-        return @@COLUMN_TOTAL_PRICE
-      when 5
         return @@COLUMN_NAME
       else
         return "Invalid"
@@ -116,6 +130,30 @@ class CommonFunctions
       when 5
         return @@COLUMN_EXTRANOTES
       else
+        return "Invalid"
+      end
+    rescue
+      return "Invalid"
+    end
+  end
+
+  def SortOption_Product
+    return "\tPress '1' to SORT by IDs\n" +
+             "\tPress '2' to SORT by Name\n" +
+             "\tPress '3' to SORT by Description"
+  end
+
+  def GetSelectColumnNameForProduct(optionSelected)
+    begin
+      case optionSelected.to_i
+      when 1
+        return @@COLUMN_ITEMID
+      when 2
+        return @@COLUMN_NAME
+      when 3
+        return @@COLUMN_DESCRIPTION
+      else
+        puts "ELSE PRODUCT"
         return "Invalid"
       end
     rescue

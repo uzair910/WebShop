@@ -1,11 +1,12 @@
 require_relative "../controllers/inventory_manager_controller.rb"
+require_relative "../controllers/commonFunctions.rb"
 require "terminal-table"
 
 class Prodcut_Management_View
   #Declare global variables
-
   @@inventory_Controller = Inventory_Controller.new
 
+  @@commonFunctions = CommonFunctions.new
   @@DisplayManagementOption = ""
   @@product_table = []
 
@@ -52,7 +53,10 @@ class Prodcut_Management_View
         if input.to_s.upcase == "A"
           DisplayTable()
           DisplayOpions()
-          print "Type Option here: "
+          bAskAgain = true
+        elsif input.to_s.upcase == "S"
+          SortProducts()
+          bAskAgain = true
         else
           print "You enetered an invalid option. Try again or press 'A' to see the options again: "
         end
@@ -210,5 +214,34 @@ class Prodcut_Management_View
 
   def FetchAllProdcuts()
     @@product_table = @@inventory_Controller.GetAllTheProduct()
+  end
+
+  def SortProducts()
+    DisplaySortOption()
+  end
+
+  def DisplaySortOption()
+    puts @@commonFunctions.GetSortTableList(@@commonFunctions.Table_Products)
+    optionSelected = gets.chomp
+    columnSelected = @@commonFunctions.GetSortedColumnName(optionSelected, @@commonFunctions.Table_Products)
+    bSortOrderAscending = true
+    if columnSelected.upcase != @@commonFunctions.Column_Invalid
+      print "Inorder to sort in descending order, press 'D' (press any other key to continue): "
+      sortOrder = gets.chomp
+      begin
+        if sortOrder.upcase.to_s == "D"
+          bSortOrderAscending = false
+        end
+      rescue
+      end
+      @@product_table = @@inventory_Controller.SortProductByColumn(columnSelected, bSortOrderAscending)
+      # @@product_table = @@inventory_Controller.GetProductTable() #refecth the table..
+      # @@product_table.each do |item|
+      #   puts "#{item}"
+      # end
+      DisplayTable()
+    else
+      puts "Cannont sort based on your selection. try again"
+    end
   end
 end
