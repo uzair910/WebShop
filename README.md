@@ -113,19 +113,76 @@ Each model file has an instant of db (db/db_initization) that it uses to perform
 1) You may run the application in terminal (ruby terminal_view.rb)
 2) Following is a list of Features that are implemented and the ones that are not implemented:
 
-  1) SORTING                                        : DONE
+  1) SORTING                                                                            : DONE
       a Sorting for all tables is taking place.
-      b You have to give command (S/s) and select the column name.
+        Controller/CommonFunctions.GetSortedList
+      b You have to give command (S/s) and select the column name and sort order.
       c Each view uses common function (controller/commonFunctions.GetSortedList)
-        This method is generic and all it needs is the hashset of items (table), the column to be used for sorting and the sort order.
-  2) ADD/UPDATE and DELETE                           : DONE
+        This method is generic and all it needs is the hashset of items (table),
+        the column to be used for sorting and the sort order.
+  2) ADD/UPDATE and DELETE                                                              : DONE
       Implemented for all the tables
-  3) FILTER on Price range
+  3) FILTER by Price or quantity (including min/max range)                              : DONE
+  4) Filter by product name                                                             : DONE
+        a. Centralized method used by all view
+              Controller/CommonFunctions.GetFilteredList
+        b. It takes the column name, and price range value and product name
+        c. Then it detects the column typ (Int, numeric or text)
+            c1. if its text, it takes paramter name and does string comparision
+                (matching case, and not case sensitive)
+            c2. If number is detected, it compares the range using
+                min and max values entered from the console.
 
-  4) Filter by product name
+  5) Pagination                                                                         : PENDING
 
-  5) Pagination
-
-  6) Unit tests
+  6) Unit tests                                                                         : PENDING
 
 
+######################################################################################### CHEAT GUIDE
+Terminal commands in different view:
+
+
+You can press anytime :
+        A to view the table and options again, and
+        B to go back to previous view
+
+1) FOR Terminal View:
+
+Press 1 to shop                                                                 (Opens shopping cart)
+Press 2 to manage inventory                                                     (Opens inventory management, you can browse to product management from here)
+Press 3 to exit                                                                 (exit module)
+Press 'P' (at any time) to set items to view per page                           (not implemented)
+Press 'A' (at any time) see the table/Options for that module again
+
+2) Shopping Cart View:
+
+Press 'S' to SORT items in the table                        :sort rows
+Press 'F' to FILTER items by price                          :filter data
+Press 'B' to go back to main page                           :navigate back to main screen
+Press 'C' to View your CART                                 :view cart
+Press 'I' to See the inventory                              :View the inventory , products available in the shop
+Press 1 to ADD/UPDATE items to your cart
+Press 2 DELETE Items from your Cart
+Press 3 to Empty your cart                                  : DELETE ALL ITEMS from the CART
+
+3) Inventory management View:
+
+Press 'S' to SORT items in the table                            :sort rows
+Press 'F' to FILTER items                                       :filter data
+Press 'B' to go back to main page                               :navigate back to main screen
+Press 1 to MANAGE Products                                      :navigate to PRODUCT management console
+Press 2 to ADD/UPDATE item in Inventory
+Press 3 Delete Items from Inventory
+
+
+4) Product Management View
+Press 'S' to SORT items in the table                            :sort rows
+Press 'F' to FILTER items                                       :filter data
+Press 'B' to go back to main page                               :navigate back to main screen
+Press 'A' to go see the options again                           :To see the table and options again
+Press 1 to ADD new product
+Press 2 to UPDATE existing product
+Press 3 DELETE a product
+
+
+######################################################################################### CHEAT GUIDE
