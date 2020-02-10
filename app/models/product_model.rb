@@ -1,9 +1,6 @@
-require "sqlite3"
 require "./db/db_initization.rb"
 
 class Product_Model
-  #create one global variable, point to the sqlite3 database..
-  # @@db = SQLite3::Database.open "WebshopDb.db"
   @@db_instant = ""
 
   def Init()

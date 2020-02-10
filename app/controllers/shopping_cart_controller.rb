@@ -87,6 +87,9 @@ class Shopping_Cart_Controller
 
   def EmptyCart()
     # delete item from cart, but first update inventory qty
+    if @@cartList.empty?
+      return
+    end
     @@cartList.each do |item|
       itemID = item["item_id"]
       qty = item["quantity"]

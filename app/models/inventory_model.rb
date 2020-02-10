@@ -1,8 +1,6 @@
-require "sqlite3"
 require "./db/db_initization.rb"
 
 class Inventory_Model
-  #create one global variable, point to the sqlite3 database..
   @@db_instant = ""
 
   def Init()

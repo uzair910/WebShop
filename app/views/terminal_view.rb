@@ -1,6 +1,7 @@
-require_relative "../controllers/welcome_terminal_controller.rb"
+# require_relative "../controllers/welcome_terminal_controller.rb"
 require_relative "./shopping_view.rb"
 require_relative "./management_view.rb"
+require_relative "../controllers/shopping_cart_controller.rb"
 
 class Termainal_View
   @@options = "\nPress 1 to shop\nPress 2 to manage inventory\nPress 3 to exit\nPress 'P' (at any time) to set items to view per page\n" +
@@ -9,6 +10,7 @@ class Termainal_View
   def Init()
     managementView = Management_View.new
     shoppingCartView = Shopping_Cart_View.new
+    @@cart_Controller = Shopping_Cart_Controller.new
     puts "\n\n\t\tWelcome to terminal edition of Kwiki Mart"
     puts @@options
     input = 0
@@ -30,6 +32,8 @@ class Termainal_View
           managementView.Run
           puts @@options
         elsif input.to_i == 3
+          #empty cart and exit
+          @@cart_Controller.EmptyCart()
           break
         else
           bDisplayInvalidOption = true
