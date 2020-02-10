@@ -19,7 +19,6 @@ class Shopping_Cart_View
                                 "Press 'C' to View your CART\n" +
                                 "Press 'I' to See the inventory\n" +
                                 "Press 1 to ADD/UPDATE items to your cart\n" +
-                                # "Press 2 to UPDATE item quantity for an Item in your cart\n" +
                                 "Press 2 DELETE Items from your Cart\n" +
                                 "Press 3 to Empty your cart\n"
     LoadInventory()
@@ -40,7 +39,6 @@ class Shopping_Cart_View
         if input.to_i == 1 # DONE
           # to the shopping cart
           AddItemsToCart()
-          puts @@DisplayManagementOption
         elsif input.to_i == 2 # DELETE In progres
           # to management panel
           DeleteItem()
@@ -56,7 +54,6 @@ class Shopping_Cart_View
           puts "PAGINATION"  #Todo
         elsif input.to_s.upcase == "A"
           DisplayCartItems()
-          puts @@DisplayManagementOption
         elsif input.to_s.upcase == "C"
           DisplayCartItems()
         elsif input.to_s.upcase == "I"
@@ -71,6 +68,7 @@ class Shopping_Cart_View
       if bDisplayInvalidOption
         print "Invalid option, try again: "
       else
+        puts @@DisplayManagementOption
         print "Enter choice: "
       end
     end
@@ -104,11 +102,10 @@ class Shopping_Cart_View
           qtyInCart = @@cart_Controller.GetItemQuantityInCart(itemID.to_i)
           @@cart_Controller.DeleteItem(itemID, qtyInCart)
           LoadCartItem()
-          DisplayCartItems()
           ReloadInventoryTable()
-
+          DisplayCartItems()
           puts "\tItem removed from your cart"
-          next
+          break
         else
           puts "\tThis item doesnot exist in your cart"
           next
@@ -160,7 +157,6 @@ class Shopping_Cart_View
               #Kaikki hyvin, lets process the order..
               #add to the cart, and then update qty in the inventory
               remainingItems = availableQty.to_i - orderedQty.to_i
-
               @@cart_Controller.InsertOrUpdateCart(itemID, orderedQty, remainingItems)
               LoadCartItem()
               DisplayCartItems()
@@ -207,7 +203,7 @@ class Shopping_Cart_View
     columnSelected = @@commonFunctions.GetSortedColumnName(optionSelected, @@commonFunctions.Table_Cart)
     bSortOrderAscending = true
     if columnSelected.upcase != @@commonFunctions.Column_Invalid
-      print "Inorder to sort in descending order, press 'D' (press any other key to continue: "
+      print "Inorder to sort in descending order, press 'D' (press any other key to continue): "
       sortOrder = gets.chomp
       begin
         if sortOrder.upcase.to_s == "D"

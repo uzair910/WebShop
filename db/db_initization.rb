@@ -89,7 +89,6 @@ class Database_Instant
 
   def RestoreItemQty(item_id, qty)
     @@db.results_as_hash = true
-    puts ".RestoreItemQty #{qty} where item_id = #{item_id}"
     @@db.execute "UPDATE Inventory set quantity = quantity + #{qty} where item_id = #{item_id}"
   end
 

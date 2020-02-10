@@ -2,6 +2,14 @@ class CommonFunctions
   @@table_Cart = "CART"
   @@table_Inventory = "INVENTORY"
   @@table_Products = "PRODUCTS"
+
+  #Columns definition
+  @@COLUMN_ITEMID = "ITEM_ID"
+  @@COLUMN_PRICE = "PRICE"
+  @@COLUMN_QUANTITY = "QUANTITY"
+  @@COLUMN_NAME = "NAME"
+  @@COLUMN_TOTAL_PRICE = "TOTAL_PRICE"
+  @@COLUMN_INVALID = "Invalid"
   #getters
   def Table_Cart
     return @@table_Cart.upcase
@@ -19,6 +27,15 @@ class CommonFunctions
     @@COLUMN_INVALID.upcase
   end
 
+  #GENERIC SORTING METHOD
+  def GetSortedList(itemList, columnName, bAsc)
+    if bAsc #ascending order
+      return itemList.sort_by { |k| k["#{columnName.downcase}"] }
+    else #descending order
+      return itemList.sort_by { |k| k["#{columnName.downcase}"] }.reverse!
+    end
+  end
+
   #Methods
   def GetSortTableList(table_name)
     case table_name.to_s.upcase
@@ -32,8 +49,6 @@ class CommonFunctions
       "Error: Not a valid table name"
     end
   end
-
-  #BASEKET TABLE
 
   def GetSortedColumnName(optionSelected, table_name)
     case table_name.to_s.upcase
@@ -52,7 +67,7 @@ class CommonFunctions
     return "\tPress '1' to SORT by IDs\n" +
              "\tPress '2' to SORT by Price\n" +
              "\tPress '3' to SORT by  Quantity\n" +
-             "\tPress '4' to SORT by  Total Price\n" +
+             #  "\tPress '4' to SORT by  Total Price\n" + #not working atm, because we dont have column with the same name, PHASE 4
              "\tPress '5' to SORT by  Name"
   end
 
@@ -76,12 +91,4 @@ class CommonFunctions
       return "Invalid"
     end
   end
-
-  #Columns definition
-  @@COLUMN_ITEMID = "ITEM_ID"
-  @@COLUMN_PRICE = "PRICE"
-  @@COLUMN_QUANTITY = "QUANTITY"
-  @@COLUMN_NAME = "NAME"
-  @@COLUMN_TOTAL_PRICE = "TOTAL_PRICE"
-  @@COLUMN_INVALID = "Invalid"
 end

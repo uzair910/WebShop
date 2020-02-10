@@ -1,27 +1,34 @@
 require_relative "../models/cart_model.rb"
 require_relative "../controllers/inventory_manager_controller.rb"
+require_relative "../controllers/commonFunctions.rb"
 
 class Shopping_Cart_Controller
   @@inventory_Controller = Inventory_Controller.new
   @@cart_Instance = Cart_Model.new
   @@cartList = []
+  @@commonFunctions = CommonFunctions.new
+
+  #to maintain the sort column and order, so that after CRUD ops on the table, the sort order is no lost
+  @@sort_Column = ""
+  @@bAscSort_order = true
 
   def Init()
     @@inventory_Controller.Init
     @@cart_Instance.Init
+    @@sort_Column = ""
   end
 
-  def SortByColumn(columnName, bAsc)
-    if bAsc #ascending order
-      @@cartList = @@cartList.sort_by { |k| k["#{columnName.downcase}"] }
-    else #descending order
-      @@cartList = @@cartList.sort_by { |k| k["#{columnName.downcase}"] }.reverse!
-    end
+  def SortByColumn(columnName, bAsc = true)
+    @@cartList = @@commonFunctions.GetSortedList(@@cartList, columnName, bAsc)
+    @@sort_Column = columnName # need to store the state for the column
+    @@bAscSort_order = bAsc
   end
 
-  def PopulateCartTable(sortBy = "")
+  def PopulateCartTable()
     GetAllItemsFromCart()
-    #p.name ,i.price, b.item_id, b.quantity
+    if !@@sort_Column.empty?
+      SortByColumn(@@sort_Column, @@bAscSort_order)
+    end
     return GetCartTable()
   end
 
