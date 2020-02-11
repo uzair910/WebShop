@@ -304,6 +304,8 @@ class CommonFunctions
       return CartTable(itemToBeVisiblelist, list)
     elsif table.to_s == @@table_Inventory
       return InventoryTable(itemToBeVisiblelist)
+    elsif table.to_s == @@table_Products
+      return ProductTable(itemToBeVisiblelist)
     end
   end
 
@@ -326,7 +328,6 @@ class CommonFunctions
     if @@itemsPerPage.to_i < 0
       endIndex = list.length()
     end
-    puts "#{startIndex} - #{endIndex}  #{@@itemsPerPage}"
     index = 1
     list.each do |item|
       if index.to_i >= startIndex.to_i && index.to_i < endIndex.to_i
@@ -358,6 +359,26 @@ class CommonFunctions
 
     tableRows << [sPageText, "", "", "", ""]
     return Terminal::Table.new :title => "Inventory", :headings => ["ID", "Name", "Price (Euros)", "Quantity", "Extra Notes"], :rows => tableRows
+  end
+
+  def ProductTable(list)
+    tableRows = []
+    list.each do |item|
+      itemID = item["item_id"]
+      name = item["name"]
+      description = item["desciption"]
+      tableRows << [itemID, name, description]
+    end
+    tableRows << ["", "", ""]
+    sPageText = ""
+    if @@itemsPerPage.to_i > 0
+      sPageText = "Page #{@@currentPageNumber}/#{@@maxPages}"
+    else
+      sPageText = "Page 1/1"
+    end
+
+    tableRows << [sPageText, "", ""]
+    return Terminal::Table.new :title => "Product", :headings => ["ID", "Name", "Description"], :rows => tableRows
   end
 
   def CartTable(list, originalList)

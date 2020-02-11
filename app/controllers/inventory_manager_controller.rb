@@ -24,10 +24,11 @@ class Inventory_Controller
   # PRODUCT table helper methods
   #Get Products in table format, so that it can be rendered at the terminal view
   def GetAllTheProduct(sortBy = "")
-    @@productsList = @@products_Instance.GetAllProducts
+    @@productsList = @@products_Instance.GetAllProducts()
     if !@@sort_Column.empty?
       SortByColumn(@@sort_Column, @@bAscSort_order, false)
     end
+
     return GetProductTable()
   end
 
@@ -81,16 +82,17 @@ class Inventory_Controller
   end
 
   def GetProductTable()
-    tableRows = []
-    @@productsList.each do |item|
-      itemID = item["item_id"]
-      name = item["name"]
-      description = item["desciption"]
-      tableRows << [itemID, name, description]
-    end
-    DisplaySortInformation()
+    # tableRows = []
+    # @@productsList.each do |item|
+    #   itemID = item["item_id"]
+    #   name = item["name"]
+    #   description = item["desciption"]
+    #   tableRows << [itemID, name, description]
+    # end
+    # DisplaySortInformation()
 
-    return Terminal::Table.new :title => "Products", :headings => ["ID", "Name", "Description"], :rows => tableRows
+    # return Terminal::Table.new :title => "Products", :headings => ["ID", "Name", "Description"], :rows => tableRows
+    return @@commonFunctions.GetPageItemFromTable(@@commonFunctions.Table_Products, @@productsList)
   end
 
   def DisplaySortInformation()
@@ -112,17 +114,6 @@ class Inventory_Controller
   end
 
   def GetInventoryTable()
-    # tableRows = []
-    # @@inventory_itemsList.each do |item|
-    #   itemID = item["item_id"]
-    #   name = item["name"]
-    #   qty = item["quantity"]
-    #   iPrice = item["price"]
-    #   extraNotes = item["extraNotes"]
-    #   tableRows << [itemID, name, iPrice, qty, extraNotes]
-    # end
-    # DisplaySortInformation()
-    # return Terminal::Table.new :title => "Inventory", :headings => ["ID", "Name", "Price (Euros)", "Quantity", "Extra Notes"], :rows => tableRows
     return @@commonFunctions.GetPageItemFromTable(@@commonFunctions.Table_Inventory, @@inventory_itemsList)
   end
 
@@ -195,5 +186,8 @@ class Inventory_Controller
     else
       @@commonFunctions.PreviousPage()
     end
+  end
+
+  def SetProductTable(table)
   end
 end

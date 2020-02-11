@@ -12,7 +12,8 @@ class Prodcut_Management_View
 
   def Init(product_table)
     DisplayWelcomeMessage()
-    @@product_table = product_table
+    # @@product_table = product_table
+    @@product_table = @@inventory_Controller.GetAllTheProduct()
     DisplayTable()
     @@DisplayManagementOption = "\nPress 'S' to SORT items in the table\n" +
                                 "Press 'F' to ADD FILTER/ 'R' to remove all the filters \n" +
@@ -25,6 +26,8 @@ class Prodcut_Management_View
 
   def Run(product_table)
     Init(product_table)
+    @@inventory_Controller.GetAllTheProduct()
+    # @@inventory_Controller.SetProductTable(@@product_table)
     DisplayOpions()
     bAskAgain = false #after a successfull operation, ask user again what to do..
     print "Type Option here: "
@@ -64,6 +67,12 @@ class Prodcut_Management_View
           FetchAllProdcuts()
           DisplayTable()
           bAskAgain = true
+        elsif input.to_s.upcase == "P"
+          InitiliazePages()
+        elsif input.to_s.upcase == "N"
+          ChangePage(true)
+        elsif input.to_s.upcase == "L"
+          ChangePage(false)
         else
           print "You enetered an invalid option. Try again or press 'A' to see the options again: "
         end
@@ -207,7 +216,7 @@ class Prodcut_Management_View
   end
 
   def DisplayTable()
-    puts @@product_table
+    puts @@inventory_Controller.GetProductTable() #refecth the table..
   end
 
   def DisplayOpions()
@@ -238,10 +247,7 @@ class Prodcut_Management_View
       rescue
       end
       @@product_table = @@inventory_Controller.SortByColumn(columnSelected, bSortOrderAscending, false)
-      # @@product_table = @@inventory_Controller.GetProductTable() #refecth the table..
-      # @@product_table.each do |item|
-      #   puts "#{item}"
-      # end
+
       DisplayTable()
     else
       puts "Cannont sort based on your selection. try again"
@@ -259,5 +265,26 @@ class Prodcut_Management_View
     #Lets filter:
     @@product_table = @@inventory_Controller.FilterByColumn(columnSelected, productName, -1, -1, false)
     DisplayTable()
+  end
+
+  def InitiliazePages()
+    print "Enter the number of items you would like to see per page: "
+    number = gets.chomp
+    bIsIntegerEntered = Integer(number) rescue false # try catch equilent to see if input is integer or string
+    if bIsIntegerEntered
+      @@inventory_Controller.InitializePage(number)
+      ReLoadProductTable()
+      puts @@DisplayManagementOption
+    end
+  end
+
+  def ChangePage(bToNextPage)
+    @@inventory_Controller.ChangePage(bToNextPage)
+    ReLoadProductTable()
+  end
+
+  def ReLoadProductTable()
+    DisplayTable()
+    puts @@DisplayManagementOption
   end
 end
