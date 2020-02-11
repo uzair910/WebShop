@@ -382,6 +382,7 @@ class CommonFunctions
   end
 
   def CartTable(list, originalList)
+    puts "here"
     customerTotalPrice = 0
     #special  column for cart table: total price, need to make sure its caclulating total for all items , even for those that are outside the table
     originalList.each do |item|

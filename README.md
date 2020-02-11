@@ -33,7 +33,7 @@ Divided the project in to  a few phases:
               - Manage item quanitity in inventory depending on the quantity user adds to the cart
               - display message if item is not in stock
     d. Add common methods:
-          - Sorting
+          - Sorting, filtering, paging, common function to fetch tabular form of data.
 3) Phase 3
 
     a. Add common methods:
@@ -49,7 +49,7 @@ Future implementation
     . Create Web interface for the back end
 
 
-PROGRESS: As of Tuesday, 10.2.2020 19.00, phase 3 is implemented.
+PROGRESS: As of Tuesday, 10.2.2020 19.00, phase 3 is implemented. (PAGING for Shop is trouble, messes up INVENTORY)
 
 ######################################################################################### ARCHITECTURE DESCRIPTION
 

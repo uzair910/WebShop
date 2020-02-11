@@ -134,7 +134,7 @@ class Shopping_Cart_View
   def AddItemsToCart()
     puts "Lets ADD a new item to cart. You can just type 'B' to go back and cancel this operation."
     puts "We have Following items in the market: "
-    DisplayInventoryTable()
+    ReloadInventoryTable()
 
     while true
       print "\tEnter Item ID that you want to purchase: "
@@ -182,6 +182,12 @@ class Shopping_Cart_View
           DisplayCartItems()
           DisplayInventoryTable()
           puts "\tEnter item ID: "
+          # elsif itemID.to_s.upcase == "P"
+          #   InitiliazePages()
+          # elsif itemID.to_s.upcase == "N"
+          #   ChangePage(true)
+          # elsif itemID.to_s.upcase == "L"
+          #   ChangePage(false)
         else
           puts "\tInvalid ID, try entering again: "
         end
