@@ -14,7 +14,7 @@ class Shopping_Cart_View
     @@cart_Controller.Init
     # would be required again at multiple places so rather declare it globally (IDEALLY should be a private cosnt : NTS : Check if possible)
     @@DisplayManagementOption = "\nPress 'S' to SORT items in the table\n" +
-                                "Press 'F' to FILTER items by price\n" +
+                                "Press 'F' to ADD FILTER/ 'R' to remove all the filters \n" +
                                 "Press 'B' to go back to main page\n" +
                                 "Press 'C' to View your CART\n" +
                                 "Press 'I' to See the inventory\n" +
@@ -59,6 +59,9 @@ class Shopping_Cart_View
           DisplayInventoryTable()
         elsif input.to_s.upcase == "F"
           FilterCart()
+        elsif input.to_s.upcase == "R"
+          LoadCartItem()
+          DisplayCartItems()
         elsif input.to_s.upcase == "S"
           SortCart()
         else
