@@ -20,8 +20,12 @@ class Cart_Model
     @@db_instant.EmptyCart
   end
 
-  def AddOrUpdateItemToCart(itemID, quantity)
-    @@db_instant.AddOrUpdateItemToCart(itemID, quantity)
+  def AddItemToCart(itemID, quantity)
+    @@db_instant.AddItemToCart(itemID, quantity)
+  end
+
+  def UpdateCartItemQuantity(itemID, quantity)
+    @@db_instant.UpdateItemQuantityInCart(itemID, quantity)
   end
 
   ## TEST METHODS BELOW.. should be moved to model_test TODO (Phase4)
@@ -46,7 +50,7 @@ class Cart_Model
     @@db_instant.DeleteItemByID(itemID)
   end
 
-  def AddItemToCart(itemName, qty)
+  def AddItemToCartByName(itemName, qty)
     #check if item in that qty exits in the inventory..
     inventory = @@db_instant.GetAllInventoryItemsByFilters(itemName)
     bExist = false

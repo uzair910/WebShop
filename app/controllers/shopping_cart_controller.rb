@@ -70,7 +70,17 @@ class Shopping_Cart_Controller
   end
 
   def InsertOrUpdateCart(itemID, qty, remainingQty)
-    @@cart_Instance.AddOrUpdateItemToCart(itemID, qty)
+    bUpdate = false
+    @@cartList.each do |item|
+      item_ID = item["item_id"]
+      if item_ID.to_i == itemID.to_i
+        @@cart_Instance.UpdateCartItemQuantity(itemID.to_i, qty.to_i)
+        bUpdate = true
+      end
+    end
+    if !bUpdate
+      @@cart_Instance.AddItemToCart(itemID, qty)
+    end
     #need to update the table aswell.
     PopulateCartTable()
     #need to update Quantity in inventory table..
@@ -85,15 +95,17 @@ class Shopping_Cart_Controller
     end
   end
 
-  def EmptyCart()
+  def EmptyCart(bConfirmPurchase = false)
     # delete item from cart, but first update inventory qty
     if @@cartList.empty?
       return
     end
-    @@cartList.each do |item|
-      itemID = item["item_id"]
-      qty = item["quantity"]
-      @@inventory_Controller.UpdateInventoryItemQuantity(itemID.to_i, qty.to_i)
+    if (!bConfirmPurchase) #If users bought items, and quit, then dont update the inventory.
+      @@cartList.each do |item|
+        itemID = item["item_id"]
+        qty = item["quantity"]
+        @@inventory_Controller.UpdateInventoryItemQuantity(itemID.to_i, qty.to_i)
+      end
     end
     @@cart_Instance.EmptyCart()
     PopulateCartTable()

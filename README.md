@@ -1,20 +1,29 @@
 Simple Backend application for WebShop.
 Content of the file:
 
+0) Assumptions
 1) Project Phase
 2) ARCHITECTURE DESCRIPTION
 3) Guide to run terminal
 4) CHEAT SHEET (commands list)
 
+######################################################################################### Assumptions
+
+1) one session. (cart data maintained per one session)
+2) f
+
 ######################################################################################### Project Phase
 Divided the project in to  a few phases:
 
 1) Phase 1
+
     a. Get RoR fw running, with web interface (for future implementation)
     b. Create MVC pattern APP
         - Initialize classes
     c. CreateDB instant and initiliaze it
+
 2) Phase 2
+
     a. Create terminal View
     b. Add navigation between different views (Shopping Cart, Inventory and products)
     c. Add operations :
@@ -26,6 +35,7 @@ Divided the project in to  a few phases:
     d. Add common methods:
           - Sorting
 3) Phase 3
+
     a. Add common methods:
           - Filter products by name
           - Filter products by price
@@ -39,7 +49,7 @@ Future implementation
     . Create Web interface for the back end
 
 
-PROGRESS: As of Monday, 10.2.2020 14.00, phase 2 is implemented.
+PROGRESS: As of Tuesday, 10.2.2020 14.00, phase 2 is implemented.
 
 ######################################################################################### ARCHITECTURE DESCRIPTION
 
@@ -152,7 +162,8 @@ You can press anytime :
 
 Press 1 to shop                                                                 (Opens shopping cart)
 Press 2 to manage inventory                                                     (Opens inventory management, you can browse to product management from here)
-Press 3 to exit                                                                 (exit module)
+Press 3 to buy items and exit                                                   (confirm items purchase and quit. items in basket will be purchased)
+Press 4 to exit                                                                 (basket items will be returned to inventory)
 Press 'P' (at any time) to set items to view per page                           (not implemented)
 Press 'A' (at any time) see the table/Options for that module again
 

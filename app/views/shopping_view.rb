@@ -104,7 +104,6 @@ class Shopping_Cart_View
           @@cart_Controller.DeleteItem(itemID, qtyInCart)
           LoadCartItem()
           ReloadInventoryTable()
-          DisplayCartItems()
           puts "\tItem removed from your cart"
           break
         else

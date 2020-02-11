@@ -25,6 +25,9 @@ class Inventory_Controller
   #Get Products in table format, so that it can be rendered at the terminal view
   def GetAllTheProduct(sortBy = "")
     @@productsList = @@products_Instance.GetAllProducts
+    if !@@sort_Column.empty?
+      SortByColumn(@@sort_Column, @@bAscSort_order, false)
+    end
     return GetProductTable()
   end
 
@@ -71,7 +74,6 @@ class Inventory_Controller
       itemID = item["item_id"]
 
       if name.to_s.upcase == productName.to_s.upcase
-        puts "#{productName} and fetched : #{name} "
         return itemID
       end
     end

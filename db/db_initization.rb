@@ -151,14 +151,18 @@ class Database_Instant
     @@db.execute "DELETE FROM Basket where item_id =  #{itemID}"
   end
 
-  def AddOrUpdateItemToCart(itemID, quantity)
+  def AddItemToCart(itemID, quantity)
     @@db.results_as_hash = true
     rowid = @@db.execute "INSERT OR IGNORE INTO Basket (item_id, quantity) VALUES(#{itemID},#{quantity})"
     # if row id is null or empty, that means the  item already exists in the inventory, hence it we can just update the quantity..
     id = @@db.execute "select last_insert_rowid() as ITEMID" #Check the last ID of the row that was inserted.
-    if id[0]["ITEMID"] == 0 #incase the row was not inserted (happens if it exists already, then id will be 0)
-      @@db.execute "UPDATE Basket set quantity = quantity + #{quantity} where item_id = #{itemID}"
-    end
+    puts "#{id} insert"
+  end
+
+  def UpdateItemQuantityInCart(itemID, quantity)
+    @@db.results_as_hash = true
+    puts "#{itemID} update"
+    @@db.execute "UPDATE Basket set quantity = quantity + #{quantity} where item_id = #{itemID}"
   end
 
   # ---------------------------------------------Initialziation methods

@@ -15,7 +15,7 @@ class Prodcut_Management_View
     @@product_table = product_table
     DisplayTable()
     @@DisplayManagementOption = "\nPress 'S' to SORT items in the table\n" +
-                                "Press 'F' to FILTER items by price\n" +
+                                "Press 'F' to ADD FILTER/ 'R' to remove all the filters \n" +
                                 "Press 'B' to go back to Inventory Management\n" +
                                 "Press 'A' to go see the options again\n" +
                                 "Press 1 to ADD new product\n" +
@@ -59,6 +59,10 @@ class Prodcut_Management_View
           bAskAgain = true
         elsif input.to_s.upcase == "F"
           FilterProducts()
+          bAskAgain = true
+        elsif input.to_s.upcase == "R"
+          FetchAllProdcuts()
+          DisplayTable()
           bAskAgain = true
         else
           print "You enetered an invalid option. Try again or press 'A' to see the options again: "
@@ -248,33 +252,12 @@ class Prodcut_Management_View
     #filter available on col name only (for this table)
     columnSelected = @@commonFunctions.Column_Name
     bSortOrderAscending = true
-    if columnSelected.upcase != @@commonFunctions.Column_Invalid
-      productStartPrice = -1
-      productEndPrice = -1
-      productName = ""
-      if @@commonFunctions.bIsNumericCol(columnSelected.upcase) #columnSelected.upcase != @@commonFunctions.Column_Price #If price selected, need to get start and end price.
-        print "Enter Minimum value (you can leave it empty): "
-        begin
-          productStartPrice = Float(gets.chomp)
-        rescue
-          productStartPrice = -1
-        end
-        print "Enter Maximum value (you can leave it empty): "
-        begin
-          productEndPrice = Float(gets.chomp)
-        rescue
-          productEndPrice = -1
-        end
-      else
-        # name.. get name...
-        print "Enter text: "
-        productName = gets.chomp
-      end
-      #Lets filter:
-      @@product_table = @@inventory_Controller.FilterByColumn(columnSelected, productName, productStartPrice, productEndPrice, false)
-      DisplayTable()
-    else
-      puts "Cannont sort based on your selection. try again"
-    end
+
+    # name.. get name...
+    print "Enter Product text: "
+    productName = gets.chomp
+    #Lets filter:
+    @@product_table = @@inventory_Controller.FilterByColumn(columnSelected, productName, -1, -1, false)
+    DisplayTable()
   end
 end

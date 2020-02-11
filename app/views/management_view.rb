@@ -16,7 +16,7 @@ class Management_View
     @@inventory_Controller.Init
     # would be required again at multiple places so rather declare it globally (IDEALLY should be a private cosnt : NTS : Check if possible)
     @@DisplayManagementOption = "\nPress 'S' to SORT items in the table\n" +
-                                "Press 'F' to FILTER items \n" +
+                                "Press 'F' to ADD FILTER/ 'R' to remove all the filters \n" +
                                 "Press 'B' to go back to main page\n" +
                                 "Press 1 to MANAGE Products\n" +
                                 "Press 2 to ADD/UPDATE item in Inventory\n" +
@@ -57,12 +57,14 @@ class Management_View
         if input.to_s.upcase == "S" #DONE
           SortInventory()
           bShowOptionsAgain = true
-        elsif input.to_s.upcase == "F" #In progress
+        elsif input.to_s.upcase == "F" #Done
           FilterInventory()
         elsif input.to_s.upcase == "P" #Todo
           puts "PAGINATION"
         elsif input.to_s.upcase == "A"
           DisplayInventoryTable()
+        elsif input.to_s.upcase == "R"
+          ReloadInventoryTable()
         else
           print "Oops, you type an invalid option. try again? : "
         end

@@ -4,7 +4,9 @@ require_relative "./management_view.rb"
 require_relative "../controllers/shopping_cart_controller.rb"
 
 class Termainal_View
-  @@options = "\nPress 1 to shop\nPress 2 to manage inventory\nPress 3 to exit\nPress 'P' (at any time) to set items to view per page\n" +
+  @@options = "\nPress 1 to shop\nPress 2 to manage inventory\nPress 3 to buy items and exit\n" +
+              "Press 4 to exit\n" +
+              "Press 'P' (at any time) to set items to view per page\n" +
               "Press 'A' (at any time) see the table/Options for that module again"   #by default, view all items in one page"
 
   def Init()
@@ -32,6 +34,11 @@ class Termainal_View
           managementView.Run
           puts @@options
         elsif input.to_i == 3
+          #empty just the cart items and exit
+          @@cart_Controller.EmptyCart(true)
+          print "Thankyou for shopping at our shop. "
+          break
+        elsif input.to_i == 4
           #empty cart and exit
           @@cart_Controller.EmptyCart()
           break

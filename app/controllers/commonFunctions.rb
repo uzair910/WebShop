@@ -44,7 +44,7 @@ class CommonFunctions
   def FilterOption_Cart
     return "\tPress '1' to Filter by Names\n" +
              "\tPress '2' to Filter by Price\n" +
-             "\tPress '3' to SORT by Quantity"
+             "\tPress '3' to Filter by Quantity"
     #  "\tPress '4' to SORT by Quantity"
   end
 
@@ -120,9 +120,6 @@ class CommonFunctions
       itemList = itemList.select { |k| minValue <= Float(k["#{columnName.downcase}"]) && Float(k["#{columnName.downcase}"]) <= maxValue }
     else #filter by text, like
       itemList = itemList.select { |item| item["#{columnName.downcase}"].downcase.include? name.downcase }
-    end
-    itemList.each do |item|
-      puts "#{item}"
     end
     return itemList
   end
@@ -280,7 +277,6 @@ class CommonFunctions
       when 3
         return @@COLUMN_DESCRIPTION
       else
-        puts "ELSE PRODUCT"
         return "Invalid"
       end
     rescue
