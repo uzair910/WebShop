@@ -112,17 +112,18 @@ class Inventory_Controller
   end
 
   def GetInventoryTable()
-    tableRows = []
-    @@inventory_itemsList.each do |item|
-      itemID = item["item_id"]
-      name = item["name"]
-      qty = item["quantity"]
-      iPrice = item["price"]
-      extraNotes = item["extraNotes"]
-      tableRows << [itemID, name, iPrice, qty, extraNotes]
-    end
-    DisplaySortInformation()
-    return Terminal::Table.new :title => "Inventory", :headings => ["ID", "Name", "Price (Euros)", "Quantity", "Extra Notes"], :rows => tableRows
+    # tableRows = []
+    # @@inventory_itemsList.each do |item|
+    #   itemID = item["item_id"]
+    #   name = item["name"]
+    #   qty = item["quantity"]
+    #   iPrice = item["price"]
+    #   extraNotes = item["extraNotes"]
+    #   tableRows << [itemID, name, iPrice, qty, extraNotes]
+    # end
+    # DisplaySortInformation()
+    # return Terminal::Table.new :title => "Inventory", :headings => ["ID", "Name", "Price (Euros)", "Quantity", "Extra Notes"], :rows => tableRows
+    return @@commonFunctions.GetPageItemFromTable(@@commonFunctions.Table_Inventory, @@inventory_itemsList)
   end
 
   def UpdateInventoryItem(item_id, price = -1, quantity = -1, extraNotes = "")
@@ -162,13 +163,6 @@ class Inventory_Controller
     return -1
   end
 
-  # def SortProductByColumn(columnName, bAsc = true)
-  #   @@productsList = @@commonFunctions.GetSortedList(@@productsList, columnName, bAsc)
-  #   @@sort_Column = columnName # need to store the state for the column
-  #   @@bAscSort_order = bAsc
-  #   return GetProductTable()
-  # end
-
   def SortByColumn(columnName, bAsc = true, bFromInventoryView = true)
     @@sort_Column = columnName # need to store the state for the column
     @@bAscSort_order = bAsc
@@ -188,6 +182,18 @@ class Inventory_Controller
     else
       @@productsList = @@commonFunctions.GetFilteredList(@@productsList, columnSelected, name, minValue, maxValue)
       return GetProductTable()
+    end
+  end
+
+  def InitializePage(itemsPerPage)
+    @@commonFunctions.IntializePageDisplay(itemsPerPage)
+  end
+
+  def ChangePage(bToNextPage)
+    if bToNextPage
+      @@commonFunctions.NextPage()
+    else
+      @@commonFunctions.PreviousPage()
     end
   end
 end

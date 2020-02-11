@@ -7,6 +7,8 @@ class Termainal_View
   @@options = "\nPress 1 to shop\nPress 2 to manage inventory\nPress 3 to buy items and exit\n" +
               "Press 4 to exit\n" +
               "Press 'P' (at any time) to set items to view per page\n" +
+              "\tPress 'N to goto next page\n" +
+              "\tPress 'L to goto previous page\n" +
               "Press 'A' (at any time) see the table/Options for that module again"   #by default, view all items in one page"
 
   def Init()

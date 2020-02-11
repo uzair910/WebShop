@@ -51,7 +51,11 @@ class Shopping_Cart_View
       else
         break if input.to_s.upcase == "B"
         if input.to_s.upcase == "P"
-          puts "PAGINATION"  #Todo
+          InitiliazePages()
+        elsif input.to_s.upcase == "N"
+          ChangePage(true)
+        elsif input.to_s.upcase == "L"
+          ChangePage(false)
         elsif input.to_s.upcase == "A"
         elsif input.to_s.upcase == "C"
           DisplayCartItems()
@@ -71,7 +75,7 @@ class Shopping_Cart_View
       if bDisplayInvalidOption
         print "Invalid option, try again: "
       else
-        DisplayCartItems()
+        ReLoadCartTable()
         puts @@DisplayManagementOption
         print "Enter choice: "
       end
@@ -174,9 +178,7 @@ class Shopping_Cart_View
         end
       else
         break if itemID.to_s.upcase == "B"
-        if itemID.to_s.upcase == "P" #Todo
-          puts "\tPAGINATION"
-        elsif itemID.to_s.upcase == "A"
+        if itemID.to_s.upcase == "A"
           DisplayCartItems()
           DisplayInventoryTable()
           puts "\tEnter item ID: "
@@ -200,6 +202,25 @@ class Shopping_Cart_View
     DisplaySortOption()
   end
 
+  def InitiliazePages()
+    print "Enter the number of items you would like to see per page: "
+    number = gets.chomp
+    bIsIntegerEntered = Integer(number) rescue false # try catch equilent to see if input is integer or string
+    if bIsIntegerEntered
+      @@cart_Controller.InitializePage(number)
+    end
+  end
+
+  def ChangePage(bToNextPage)
+    @@cart_Controller.ChangePage(bToNextPage)
+    ReLoadCartTable()
+  end
+
+  def ReLoadCartTable()
+    @@cart_table = @@cart_Controller.GetCartTable() #refecth the table..
+    DisplayCartItems()
+  end
+
   def DisplaySortOption()
     puts @@commonFunctions.GetSortTableList(@@commonFunctions.Table_Cart)
     print "Type your option: (or press 'B' to go back) "
@@ -216,8 +237,7 @@ class Shopping_Cart_View
       rescue
       end
       @@cart_table = @@cart_Controller.SortByColumn(columnSelected, bSortOrderAscending)
-      @@cart_table = @@cart_Controller.GetCartTable() #refecth the table..
-      DisplayCartItems()
+      ReLoadCartTable()
     else
       puts "Cannont sort based on your selection. try again"
     end

@@ -32,23 +32,21 @@ class Shopping_Cart_Controller
     return GetCartTable()
   end
 
+  def InitializePage(itemsPerPage)
+    @@commonFunctions.IntializePageDisplay(itemsPerPage)
+  end
+
+  def ChangePage(bToNextPage)
+    if bToNextPage
+      @@commonFunctions.NextPage()
+    else
+      @@commonFunctions.PreviousPage()
+    end
+  end
+
   def GetCartTable()
     if @@cartList.any?
-      customerTotalPrice = 0
-      tableRows = []
-      @@cartList.each do |item|
-        itemID = item["item_id"]
-        name = item["name"]
-        qty = item["quantity"]
-        iPrice = item["price"]
-        iTotalPrice = qty * iPrice
-        tableRows << [itemID, name, iPrice, qty, iTotalPrice.round(2)]
-        customerTotalPrice += iTotalPrice
-      end
-      # Insert a footer row...
-
-      tableRows << ["", "", "", "TOTAL: (euros)", customerTotalPrice.round(2)]
-      return Terminal::Table.new :title => "Shopping Basket", :headings => ["ID", "Name", "Price (Euros)", "Quantity", "Total Price (Euros)"], :rows => tableRows
+      return @@commonFunctions.GetPageItemFromTable(@@commonFunctions.Table_Cart, @@cartList)
     else
       return "\t******\tCart Is EMPTY\t******"
     end

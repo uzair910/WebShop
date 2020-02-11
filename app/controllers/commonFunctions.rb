@@ -14,6 +14,11 @@ class CommonFunctions
   @@COLUMN_DESCRIPTION = "DESCIPTION"
   @@COLUMN_INVALID = "INVALID" # to handle errors
 
+  #For pagination
+  @@currentPageNumber = 1
+  @@itemsPerPage = -1         #-1 =ALL ITEMS In one page
+  @@maxPages = 1
+
   def SortOption_Cart()
     return "\tPress '1' to SORT by IDs\n" +
              "\tPress '2' to SORT by Price\n" +
@@ -281,6 +286,124 @@ class CommonFunctions
       end
     rescue
       return "Invalid"
+    end
+  end
+
+  ##############################################################  PAGINATION
+
+  def IntializePageDisplay(items_per_page)
+    @@itemsPerPage = items_per_page
+    @@currentPageNumber = 1
+  end
+
+  def GetPageItemFromTable(table, list)
+    @@maxPages = (list.length() / @@itemsPerPage.to_f).ceil()  # why does this return negative ?
+    FixPages() #not sure by maxpage is initialized by -1 always...?
+    itemToBeVisiblelist = FetchViewAbleItems(list)
+    if table.to_s == @@table_Cart
+      return CartTable(itemToBeVisiblelist, list)
+    elsif table.to_s == @@table_Inventory
+      return InventoryTable(itemToBeVisiblelist)
+    end
+  end
+
+  def FixPages()
+    #just to make sure..
+    if @@maxPages.to_i < 0
+      @@maxPages = 1
+    end
+    if @@maxPages.to_i < @@currentPageNumber.to_i
+      @@currentPageNumber = @@maxPages
+    end
+  end
+
+  def FetchViewAbleItems(list)
+    filteredList = []
+    item_iterator = 0 #counter for items, if this equals to = itemsPerPage, then that means goto next page
+    page_Iterator = 1
+    startIndex = ((@@currentPageNumber - 1).to_i * @@itemsPerPage.to_i).to_i + 1
+    endIndex = startIndex.to_i + @@itemsPerPage.to_i
+    if @@itemsPerPage.to_i < 0
+      endIndex = list.length()
+    end
+    puts "#{startIndex} - #{endIndex}  #{@@itemsPerPage}"
+    index = 1
+    list.each do |item|
+      if index.to_i >= startIndex.to_i && index.to_i < endIndex.to_i
+        filteredList << item
+      end
+      index += 1
+    end
+
+    return filteredList
+  end
+
+  def InventoryTable(list)
+    tableRows = []
+    list.each do |item|
+      itemID = item["item_id"]
+      name = item["name"]
+      qty = item["quantity"]
+      iPrice = item["price"]
+      extraNotes = item["extraNotes"]
+      tableRows << [itemID, name, iPrice, qty, extraNotes]
+    end
+    tableRows << ["", "", "", "", ""]
+    sPageText = ""
+    if @@itemsPerPage.to_i > 0
+      sPageText = "Page #{@@currentPageNumber}/#{@@maxPages}"
+    else
+      sPageText = "Page 1/1"
+    end
+
+    tableRows << [sPageText, "", "", "", ""]
+    return Terminal::Table.new :title => "Inventory", :headings => ["ID", "Name", "Price (Euros)", "Quantity", "Extra Notes"], :rows => tableRows
+  end
+
+  def CartTable(list, originalList)
+    customerTotalPrice = 0
+    #special  column for cart table: total price, need to make sure its caclulating total for all items , even for those that are outside the table
+    originalList.each do |item|
+      itemID = item["item_id"]
+      qty = item["quantity"]
+      iPrice = item["price"]
+      iTotalPrice = qty * iPrice
+      customerTotalPrice += iTotalPrice
+    end
+
+    tableRows = []
+    list.each do |item|
+      itemID = item["item_id"]
+      name = item["name"]
+      qty = item["quantity"]
+      iPrice = item["price"]
+      iTotalPrice = qty * iPrice
+      tableRows << [itemID, name, iPrice, qty, iTotalPrice.round(2)]
+      # customerTotalPrice += iTotalPrice
+    end
+    tableRows << ["", "", "", "", ""]
+    sPageText = ""
+    if @@itemsPerPage.to_i > 0
+      sPageText = "Page #{@@currentPageNumber}/#{@@maxPages}"
+    else
+      sPageText = "Page 1/1"
+    end
+
+    tableRows << [sPageText, "", "", "TOTAL: (euros)", customerTotalPrice.round(2)]
+    return Terminal::Table.new :title => "Shopping Basket", :headings => ["ID", "Name", "Price (Euros)", "Quantity", "Total Price (Euros)"], :rows => tableRows
+  end
+
+  def NextPage()
+    if @@maxPages.to_i > @@currentPageNumber.to_i
+      @@currentPageNumber += 1
+    else
+      @@currentPageNumber = @@maxPages
+    end
+  end
+
+  def PreviousPage()
+    if 1 < @@currentPageNumber.to_i
+      @@currentPageNumber -= 1
     end
   end
 end

@@ -59,8 +59,12 @@ class Management_View
           bShowOptionsAgain = true
         elsif input.to_s.upcase == "F" #Done
           FilterInventory()
-        elsif input.to_s.upcase == "P" #Todo
-          puts "PAGINATION"
+        elsif input.to_s.upcase == "P" #Done
+          InitiliazePages()
+        elsif input.to_s.upcase == "N"
+          ChangePage(true)
+        elsif input.to_s.upcase == "L"
+          ChangePage(false)
         elsif input.to_s.upcase == "A"
           DisplayInventoryTable()
         elsif input.to_s.upcase == "R"
@@ -75,13 +79,11 @@ class Management_View
     end
   end
 
-  #region Product Management
+  #Product Management
   def ProductManagement
     productManagementView = Prodcut_Management_View.new
     productManagementView.Run(@@product_table)
   end
-
-  #endregion
 
   def FetchProduct()
     @@product_table = @@inventory_Controller.GetAllTheProduct()
@@ -248,6 +250,21 @@ class Management_View
         end
       end
     end
+  end
+
+  def InitiliazePages()
+    print "Enter the number of items you would like to see per page: "
+    number = gets.chomp
+    bIsIntegerEntered = Integer(number) rescue false # try catch equilent to see if input is integer or string
+    if bIsIntegerEntered
+      @@inventory_Controller.InitializePage(number)
+      ReloadInventoryTable()
+    end
+  end
+
+  def ChangePage(bToNextPage)
+    @@inventory_Controller.ChangePage(bToNextPage)
+    ReloadInventoryTable()
   end
 
   #endregion
