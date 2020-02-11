@@ -4,6 +4,7 @@ Content of the file:
 1) Project Phase
 2) ARCHITECTURE DESCRIPTION
 3) Guide to run terminal
+4) CHEAT SHEET (commands list)
 
 ######################################################################################### Project Phase
 Divided the project in to  a few phases:
@@ -138,7 +139,7 @@ Each model file has an instant of db (db/db_initization) that it uses to perform
   6) Unit tests                                                                         : PENDING
 
 
-######################################################################################### CHEAT GUIDE
+######################################################################################### CHEAT SHEET
 Terminal commands in different view:
 
 
@@ -185,4 +186,5 @@ Press 2 to UPDATE existing product
 Press 3 DELETE a product
 
 
-######################################################################################### CHEAT GUIDE
+#########################################################################################b
+
