@@ -49,7 +49,7 @@ Future implementation
     . Create Web interface for the back end
 
 
-PROGRESS: As of Tuesday, 10.2.2020 14.00, phase 2 is implemented.
+PROGRESS: As of Tuesday, 10.2.2020 19.00, phase 3 is implemented.
 
 ######################################################################################### ARCHITECTURE DESCRIPTION
 
