@@ -3,7 +3,7 @@ Content of the file:
 
 0) Assumptions
 1) Project Phase
-2) ARCHITECTURE DESCRIPTION
+2) ARCHITECTURE and DATABASE
 3) Guide to run terminal
 4) CHEAT SHEET (commands list)
 
@@ -62,12 +62,13 @@ Future implementation
                 Divide the table related operations to seperate files, (just like in Views and Model layer)
 
 
-######################################################################################### ARCHITECTURE DESCRIPTION
+######################################################################################### ARCHITECTURE and DATABASE
 
 I tried to follow the MVC pattern.
-
 Along with model, views and controller, I have the DB layer that contains DB operations.
     --> db/db_initization.rb
+
+For the database, I used sqlite3. The current instance that this app uses is WebshopDb.db and you can find this in the root folder
 
 
 __________________DATABASE__________________________________________________
