@@ -87,19 +87,33 @@ Three main tables:
 
 __________________VIEWS_____________________________________________________
 
+
 I have 3 basic views, Each view to provide interface for each table basically.
+
     1) views/management_view.rb : Takes care of Inventory operations
+
         a. ADD product to INVENTORY
+
         b. Update product quantity and price in INVENTORY
+
         c. DELETE product from INVENTORY
+
     2) views/product_management_view.rb : Takes care of Product operations
+
         a. ADD product
+
         b. Update product description
+
         c. DELETE product
+
     3) views/shopping_view.rb : Takes care of Shopping basket of the customer
+
         a. ADD items to Basket
+
         b. Update existing items in Basket
+
         c. DELETE items from the basket
+
         d. Delete all the items
 
 Then I have implemented a terminal interface view/terminal_view
