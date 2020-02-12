@@ -125,13 +125,17 @@ __________________CONTROLLERS___________________________________________________
 Current model contains three controllers that are in use....
 
     1) controller/inventory_manager_controller
+
         a. This controller is used by 2 Views to interact with the models.
+
         b. I have categorized that Products and Inventroy under the same controllorer.
 
     2) controller/shopping_cart_controller
+
         a. Used by Shopping_View to manage the operations related to the BASKET table. (shopping cart)
 
     3) controller/commonFunctions
+
         a. I have one more controller with rather unorthadox name. This basically contains all the methods that might be used by all the views. (example: Sorting tables/Filter data and etc)
 
 __________________MODELS________________________________________________________
@@ -139,7 +143,9 @@ __________________MODELS________________________________________________________
 Each DB table has its on model file. So we got three files here:
 
     1) models/Cart_model
+
     1) models/Inventory_model
+
     3) models/Product.model
 
 Each model file has an instant of db (db/db_initization) that it uses to perform db related operations.
@@ -152,26 +158,44 @@ Each model file has an instant of db (db/db_initization) that it uses to perform
 1) You may run the application in terminal (ruby terminal_view.rb)
 2) Following is a list of Features that are implemented and the ones that are not implemented:
 
-  1) SORTING                                                                            : DONE
+  1) SORTING
+                                                                            : DONE
     a. Sorting for all tables is taking place.
+
             -> Controller/CommonFunctions.GetSortedList
+
     b. You have to give command (S/s) and select the column name and sort order.
+
     c. Each view uses common function (controller/commonFunctions.GetSortedList)
+
             ->  This method is generic and all it needs is the hashset of items (table), the column to be used for sorting and the sort order.
+
   2) ADD/UPDATE and DELETE                                                              : DONE
+
     a. Implemented for all the tables
+
   3) FILTER by Price or quantity (including min/max range)                              : DONE
+
   4) Filter by product name                                                             : DONE
+
     a. Centralized method used by all view
+
         -> Controller/CommonFunctions.GetFilteredList
+
     b. It takes the column name, and price range value and product name
+
     c. Then it detects the column typ (Int, numeric or text)
+
         -> if its text, it takes paramter name and does string comparision
+
                 (matching case, and not case sensitive)
+
         -> If number is detected, it compares the range using
+
                 min and max values entered from the console.
 
   5) Pagination                                                                         : DONE (90%)
+
         . left for the Inventory table inside Shopping view
 
   6) Unit tests                                                                         : PENDING
