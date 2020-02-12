@@ -8,7 +8,7 @@ class Product_Model
   end
 
   # ---------------------------------------------PRODUCT table, CRUD operation
-  def PopulateProducts
+  def PopulateProducts #Not used
     @@db_instant.PopulateProducts
   end
 

@@ -105,16 +105,34 @@ class Inventory_Controller
   # INVENTORY table helper methods
   #Sortby contains column name by which data is requested to be sorted , by default, its empty, meaning data will be sorted by item id
   #returns tabular form
-  def PopulateInventoryTable(sortBy = "")
+  def PopulateInventoryTable(bForShoppingView)
     @@inventory_itemsList = @@inventory_Instance.GetAllInventoryItems
     if !@@sort_Column.empty?
       SortByColumn(@@sort_Column, @@bAscSort_order)
     end
-    return GetInventoryTable()
+    if !bForShoppingView
+      return GetInventoryTable()
+    else
+      "puts here"
+      return InventoryTable()
+    end
   end
 
   def GetInventoryTable()
     return @@commonFunctions.GetPageItemFromTable(@@commonFunctions.Table_Inventory, @@inventory_itemsList)
+  end
+
+  def InventoryTable()
+    tableRows = []
+    @@inventory_itemsList.each do |item|
+      itemID = item["item_id"]
+      name = item["name"]
+      qty = item["quantity"]
+      iPrice = item["price"]
+      extraNotes = item["extraNotes"]
+      tableRows << [itemID, name, iPrice, qty, extraNotes]
+    end
+    return Terminal::Table.new :title => "Inventory", :headings => ["ID", "Name", "Price (Euros)", "Quantity", "Extra Notes"], :rows => tableRows
   end
 
   def UpdateInventoryItem(item_id, price = -1, quantity = -1, extraNotes = "")

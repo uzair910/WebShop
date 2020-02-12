@@ -6,7 +6,7 @@ require "active_support/core_ext"
 class Test
   def Go()
     db_instant = Database_Instant.new
-    #db_instant.Intialize_DB
+    db_instant.Intialize_DB
 
     ProductTablesTest(db_instant)
     InventoryTableTest(db_instant)
@@ -174,5 +174,5 @@ class Test
 end
 
 #EXECUTION
-Test.new.Go
+# Test.new.Go
 ########

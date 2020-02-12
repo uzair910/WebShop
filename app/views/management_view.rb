@@ -28,7 +28,7 @@ class Management_View
   def Run
     puts "\n\t\tWelcome to your Inventory Management Panel.\n"
     #table format for the inventory..
-    @@inventory_Table = @@inventory_Controller.PopulateInventoryTable()
+    @@inventory_Table = @@inventory_Controller.PopulateInventoryTable(false)
     DisplayInventoryTable()
     puts @@DisplayManagementOption
     bShowOptionsAgain = false
@@ -158,7 +158,7 @@ class Management_View
   end
 
   def ReloadInventoryTable()
-    @@inventory_Table = @@inventory_Controller.PopulateInventoryTable() #refecth the table..
+    @@inventory_Table = @@inventory_Controller.PopulateInventoryTable(false) #refecth the table..
     DisplayInventoryTable()
   end
 

@@ -116,7 +116,11 @@ class Shopping_Cart_Controller
   end
 
   def PopulateInventoryTable(sortBy = "")
-    return @@inventory_Controller.PopulateInventoryTable()
+    return @@inventory_Controller.PopulateInventoryTable(false)
+  end
+
+  def GetAllInventoryItemsForShoppingView() # need another method for shopping view since
+    return @@inventory_Controller.PopulateInventoryTable(true)
   end
 
   def ExistInInventory(itemID)

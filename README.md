@@ -7,10 +7,16 @@ Content of the file:
 3) Guide to run terminal
 4) CHEAT SHEET (commands list)
 
-######################################################################################### Assumptions
+######################################################################################### Assumptions/Pointers
 
 1) one session. (cart data maintained per one session)
-2) f
+2) Once you set pages, they will be applied to all the tables besides the Inventory table in Shopping View.
+    (i might now why this happens by cannot manage to resolve it because of time constraint)
+
+3) If you want to test the terminal view, you can run views/terminal_view.rb
+
+4) The db instant is already in the repository "WebshopDb", and it is accessed by default by the program
+        -> There is a lot of room for improvement in the DB layer (naming convention for starters). So please dont hate me if you see go to DB folder
 
 ######################################################################################### Project Phase
 Divided the project in to  a few phases:
@@ -44,12 +50,17 @@ Divided the project in to  a few phases:
 
 4) Phase 4
     a. Add unit test cases
+    b. fix the issue of Inventory table In Shopping view
+        . declare inventory class in controller layer.
+        . add different sorting and pagination controls in it
+    c. Move texts to from views to controller/commonfunctions (Centralize repititive components)
 
 Future implementation
     . Create Web interface for the back end
+    . Improvement in the DB layer.
+                Use configuration file to specify db to be used,
+                Divide the table related operations to seperate files, (just like in Views and Model layer)
 
-
-PROGRESS: As of Tuesday, 10.2.2020 19.00, phase 3 is implemented. (PAGING for Shop is trouble, messes up INVENTORY)
 
 ######################################################################################### ARCHITECTURE DESCRIPTION
 
@@ -145,7 +156,8 @@ Each model file has an instant of db (db/db_initization) that it uses to perform
         -> If number is detected, it compares the range using
                 min and max values entered from the console.
 
-  5) Pagination                                                                         : PENDING
+  5) Pagination                                                                         : DONE (90%)
+        . left for the Inventory table inside Shopping view
 
   6) Unit tests                                                                         : PENDING
 
@@ -164,7 +176,9 @@ Press 1 to shop                                                                 
 Press 2 to manage inventory                                                     (Opens inventory management, you can browse to product management from here)
 Press 3 to buy items and exit                                                   (confirm items purchase and quit. items in basket will be purchased)
 Press 4 to exit                                                                 (basket items will be returned to inventory)
-Press 'P' (at any time) to set items to view per page                           (not implemented)
+Press 'P' (at any time) to set items to view per page
+        Press 'N to goto next page
+        Press 'L to goto previous page
 Press 'A' (at any time) see the table/Options for that module again
 
 2) Shopping Cart View:

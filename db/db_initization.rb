@@ -3,20 +3,21 @@ require "sqlite3"
 class Database_Instant
   #create one global variable, point to the sqlite3 database..
   @@db = SQLite3::Database.open "WebshopDb.db"
+  #@@db = SQLite3::Database.Create "WebshopDb_TEST.db"
 
   def Intialize_DB
     # OpenConnection()
     CreateTables() #start creating tables..
   end
 
-  # ---------------------------------------------PRODUCT table, CRUD operation
-  def PopulateProducts
-    puts "Inserting Data"
-    #populate products...
-    @@db.execute "INSERT INTO Product (name,desciption) VALUES ('Winter Takki', 'Blue color jacket, Large size')"
-    # id = @@db.execute "select last_insert_rowid()"
-    # return id  # last insertid..
-    puts "Test product inserted"
+  # --------------------------- ------------------PRODUCT table, CRUD operation
+  def PopulateProducts # This method was for intiial testing purpose, not being used
+    # puts "Inserting Data"
+    # #populate products...
+    # @@db.execute "INSERT INTO Product (name,desciption) VALUES ('TALVI HANSKAT', 'Stay warm')"
+    # # id = @@db.execute "select last_insert_rowid()"
+    # # return id  # last insertid..
+    # puts "Test product inserted"
   end
 
   def UpdateProduct(item_id, product_Name = "", product_Description = "") # called if atleast name needs to be update, description update is optional

@@ -289,7 +289,7 @@ class Shopping_Cart_View
 
   #regiion Inventory Management
   def LoadInventory()
-    @@inventory_Table = @@cart_Controller.PopulateInventoryTable()
+    @@inventory_Table = @@cart_Controller.GetAllInventoryItemsForShoppingView()
   end
 
   def DisplayInventoryTable()
@@ -297,7 +297,7 @@ class Shopping_Cart_View
   end
 
   def ReloadInventoryTable()
-    @@inventory_Table = @@cart_Controller.PopulateInventoryTable() #refecth the table..
+    @@inventory_Table = @@cart_Controller.GetAllInventoryItemsForShoppingView() #refecth the table..
     DisplayInventoryTable()
   end
 
