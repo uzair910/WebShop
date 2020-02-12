@@ -158,8 +158,8 @@ Each model file has an instant of db (db/db_initization) that it uses to perform
 1) You may run the application in terminal (ruby terminal_view.rb)
 2) Following is a list of Features that are implemented and the ones that are not implemented:
 
-  1) SORTING
-                                                                            : DONE
+  1) SORTING                                                                            : DONE
+
     a. Sorting for all tables is taking place.
 
             -> Controller/CommonFunctions.GetSortedList
