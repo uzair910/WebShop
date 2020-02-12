@@ -11,7 +11,7 @@ Content of the file:
 
 1) one session. (cart data maintained per one session)
 2) Once you set pages, they will be applied to all the tables besides the Inventory table in Shopping View.
-    (i might now why this happens by cannot manage to resolve it because of time constraint)
+    (i might now why this happens by cannot manage to resolve it)
 
 3) If you want to test the terminal view, you can run views/terminal_view.rb
 
@@ -109,6 +109,7 @@ You can run this to test the application and functionalities
 __________________CONTROLLERS___________________________________________________
 
 Current model contains three controllers that are in use....
+
     1) controller/inventory_manager_controller
         a. This controller is used by 2 Views to interact with the models.
         b. I have categorized that Products and Inventroy under the same controllorer.
