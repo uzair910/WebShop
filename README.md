@@ -202,53 +202,85 @@ Each model file has an instant of db (db/db_initization) that it uses to perform
 
 
 ######################################################################################### CHEAT SHEET
+
 Terminal commands in different view:
 
 
 You can press anytime :
+
         A to view the table and options again, and
+
         B to go back to previous view
 
 1) FOR Terminal View:
 
 Press 1 to shop                                                                 (Opens shopping cart)
+
 Press 2 to manage inventory                                                     (Opens inventory management, you can browse to product management from here)
+
 Press 3 to buy items and exit                                                   (confirm items purchase and quit. items in basket will be purchased)
+
 Press 4 to exit                                                                 (basket items will be returned to inventory)
+
 Press 'P' (at any time) to set items to view per page
+
         Press 'N to goto next page
+
         Press 'L to goto previous page
+
 Press 'A' (at any time) see the table/Options for that module again
 
 2) Shopping Cart View:
 
 Press 'S' to SORT items in the table                        :sort rows
+
 Press 'F' to FILTER items by price                          :filter data
+
 Press 'B' to go back to main page                           :navigate back to main screen
+
 Press 'C' to View your CART                                 :view cart
+
 Press 'I' to See the inventory                              :View the inventory , products available in the shop
+
 Press 1 to ADD/UPDATE items to your cart
+
 Press 2 DELETE Items from your Cart
+
 Press 3 to Empty your cart                                  : DELETE ALL ITEMS from the CART
+
 
 3) Inventory management View:
 
 Press 'S' to SORT items in the table                            :sort rows
+
 Press 'F' to FILTER items                                       :filter data
+
 Press 'B' to go back to main page                               :navigate back to main screen
+
 Press 1 to MANAGE Products                                      :navigate to PRODUCT management console
+
 Press 2 to ADD/UPDATE item in Inventory
+
 Press 3 Delete Items from Inventory
 
 
+
 4) Product Management View
+
 Press 'S' to SORT items in the table                            :sort rows
+
 Press 'F' to FILTER items                                       :filter data
+
 Press 'B' to go back to main page                               :navigate back to main screen
+
 Press 'A' to go see the options again                           :To see the table and options again
+
 Press 1 to ADD new product
+
 Press 2 to UPDATE existing product
+
 Press 3 DELETE a product
+
 
 
 #########################################################################################b
