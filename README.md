@@ -1,3 +1,9 @@
+
+Worked on my first ruby app ever (sort of) as a part of assignment for one potential workspace.
+
+
+
+------------------------------------------------------------------------------------------------------------
 Simple Backend application for WebShop.
 Content of the file:
 
